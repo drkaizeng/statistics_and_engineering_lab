@@ -7,9 +7,12 @@ theme:
 
 nav:
     - Home: index.md
-    # - "Bash": 
+    - Bash: 
+        - SSH: bash/ssh.md
     - Miscellaneous:
-        - "Setting up mkdocs": misc/setting_up_mkdocs.md
+        - Setting up mkdocs: misc/setting_up_mkdocs.md
 
 markdown_extensions:
     - attr_list
+    # Enable highlighted note blocks
+    - admonition    

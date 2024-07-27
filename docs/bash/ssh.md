@@ -7,7 +7,7 @@ ssh-keygen -t ed25519 -C "$an_informative_comment_for_identifying the key"
     An id file refers to the file without the `.pub` extension.
 
 !!! important
-    Leave the passphrase blank or use `ssh-keygen -p` to remove the existing passphrase. The problem with having passphrase is that `ssh-agent` does not seem to be able to remember the passphrases for different accounts correctly between different log in sessions. This breaks the association between SSH key and the correct GitHub account (i.e., `ssh -T git@$host` does not return the correct account name).
+    Leave the passphrase blank or use `ssh-keygen -p` to remove the existing passphrase. The problem with having passphrase is that `ssh-agent` does not seem to be able to remember the passphrases for different accounts correctly between different log in sessions. This breaks the association between SSH key and the correct GitHub account (i.e., `ssh -T git@$host` does not return the correct account name). Even in the simpler case where there is only one account, having passphrase often results in being prompted to enter it, even though it has been added via `ssh-agent` before.
 
 - Start `ssh-agent`
 ```bash

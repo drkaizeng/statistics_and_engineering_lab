@@ -6,6 +6,9 @@ ssh-keygen -t ed25519 -C "$an_informative_comment_for_identifying the key"
 !!! note
     An id file refers to the file without the `.pub` extension.
 
+!!! important
+    Leave the passphrase blank or use `ssh-keygen -p` to remove the existing passphrase. The problem with having passphrase is that `ssh-agent` does not seem to be able to remember the passphrases for different accounts correctly between different log in sessions. This breaks the association between SSH key and the correct GitHub account (i.e., `ssh -T git@$host` does not return the correct account name).
+
 - Start `ssh-agent`
 ```bash
 eval "$(ssh-agent -s)"
@@ -20,6 +23,10 @@ ssh-add --apple-use-keychain $path_to_saved_id_file
 ```bash   
 ssh-add $path_to_saved_id_file
 ```
+
+!!! note
+    In light of the important info on why passphrase should be left blank, it is possible that `keychain` is no longer needed for Linux.
+
 Install `keychain`, which could be done using either `sudo apt-get install keychain`, or downloading a binary from <https://github.com/funtoo/keychain/releases>. Then add the following to `~/.bash_profile` or `~/.profile`, so that each time we log into the system (including starting a new tmux server) the passphrase is loaded by `ssh-add` (see <https://fingers-in-the-pi.readthedocs.io/en/latest/initial_setup/ssh_setup/>).
 ```bash
 # Use only the file name not the full path

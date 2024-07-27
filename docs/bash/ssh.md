@@ -20,7 +20,7 @@ ssh-add --apple-use-keychain $path_to_saved_id_file
 ```bash   
 ssh-add $path_to_saved_id_file
 ```
-Install `keychain`, which could be done using either `sudo apt-get install keychain`, or downloading a binary from https://github.com/funtoo/keychain/releases. Then add the following to `~/.bash_profile` or `~/.profile`, so that each time we log into the system (including starting a new tmux server) the passphrase is loaded by `ssh-add` (see https://fingers-in-the-pi.readthedocs.io/en/latest/initial_setup/ssh_setup/).
+Install `keychain`, which could be done using either `sudo apt-get install keychain`, or downloading a binary from <https://github.com/funtoo/keychain/releases>. Then add the following to `~/.bash_profile` or `~/.profile`, so that each time we log into the system (including starting a new tmux server) the passphrase is loaded by `ssh-add` (see <https://fingers-in-the-pi.readthedocs.io/en/latest/initial_setup/ssh_setup/>).
 ```bash
 # Use only the file name not the full path
 eval `keychain --eval --agents ssh $name_of_saved_id_file`  

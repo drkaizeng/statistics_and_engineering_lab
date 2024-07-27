@@ -2,6 +2,8 @@ site_name: stat gen playground
 
 theme:
     name: readthedocs
+    # Use Highlight.js library for syntax highlighting for code blocks
+    highlightjs: true
 
 nav:
     - Home: index.md

@@ -23,7 +23,7 @@ ssh-add $path_to_saved_id_file
 
 - **Mac**: Update `~/.ssh/config`. One entry for each id file. ***NB***: `~/.ssh/config` must have permisson `644`.
 ```bash
-Host github.com  # this should be unique for each id file 
+Host $host_name  # this should be unique for each id file 
     HostName github.com  # the true web address; leave as is
     AddKeysToAgent yes
     UseKeychain yes
@@ -32,13 +32,22 @@ Host github.com  # this should be unique for each id file
 
 - **Linux**: Update `~/.ssh/config`. One entry for each id file. ***NB***: `~/.ssh/config` must have permisson `644`.
 ```bash
-Host github.com
-    HostName github.com
+Host $host_name  # this should be unique for each id file 
+    HostName github.com  # the true web address; leave as is
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
 ```
 
-- Test
+- Test. For each `$host_name`, do the following, the output of which should include the correct account name.
 ```bash
-ssh -T git@$host  # $host is the name set the Host field in ~/.ssh/config
+ssh -T git@$host_name  # $host_name is the name set the Host field in ~/.ssh/config
+```
+
+- Use the correct `$host_name` for GitHub repos under different accounts.
+```bash
+# Clone new repo
+git clone git@${host_name}:drkaizeng/stat_gen_playground.git
+
+# Update existing repo
+git remote set-url origin git@${host_name}:drkaizeng/stat_gen_playground.git
 ```

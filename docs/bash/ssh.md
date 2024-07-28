@@ -45,9 +45,9 @@ ssh -T git@$host_name  # $host_name is the name set the Host field in ~/.ssh/con
 
 - Use the correct `$host_name` for GitHub repos under different accounts.
 ```bash
-# Clone new repo
+# Clone new repos
 git clone git@${host_name}:drkaizeng/stat_gen_playground.git
 
-# Update existing repo
+# Update existing repos
 git remote set-url origin git@${host_name}:drkaizeng/stat_gen_playground.git
 ```

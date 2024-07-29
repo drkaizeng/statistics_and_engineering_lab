@@ -1,5 +1,5 @@
 # Setting up multiple key pairs for multiple GitHub accounts
-- Run the following comment to generate a new SSH key. When prompted, save the id file with an informative name to `~/.ssh`. 
+- Run the following command to generate new SSH keys (one for each GitHub account and add them to the account). When prompted, save the id file with an informative name to `~/.ssh`. 
 ```bash
 ssh-keygen -t ed25519 -C "$an_informative_comment_for_identifying the key"
 ```

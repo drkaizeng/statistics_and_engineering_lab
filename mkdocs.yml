@@ -9,10 +9,12 @@ nav:
     - Home: index.md
     - Bash: 
         - SSH: bash/ssh.md
+    - Bioinformatics:
+        - bcftools: bioinformatics/bcftools.md
     - Miscellaneous:
         - Setting up mkdocs: misc/setting_up_mkdocs.md
 
 markdown_extensions:
     - attr_list
-    # Enable highlighted note blocks
+    # Enable highlighted note/important blocks
     - admonition    

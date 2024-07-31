@@ -1,4 +1,4 @@
-# Tips
+# Miscellaneous tips and examples
 
 ## Load a module using its absolute path
 ```python

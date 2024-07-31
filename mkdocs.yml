@@ -8,6 +8,7 @@ theme:
 nav:
     - Home: index.md
     - Bash: 
+        - Tips and examples: bash/tips_examples.md
         - SSH: bash/ssh.md
     - Bioinformatics:
         - bcftools: bioinformatics/bcftools.md
@@ -15,7 +16,7 @@ nav:
     - Miscellaneous:
         - Setting up mkdocs: misc/setting_up_mkdocs.md
     - Python:
-        - Tips: python/tips.md
+        - Tips and examples: python/tips_examples.md
 
 markdown_extensions:
     - attr_list

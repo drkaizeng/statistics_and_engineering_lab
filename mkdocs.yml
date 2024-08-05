@@ -10,6 +10,7 @@ nav:
     - Bash: 
         - Tips and examples: bash/tips_examples.md
         - SSH: bash/ssh.md
+        - vim: bash/vim.md
     - Bioinformatics:
         - bcftools: bioinformatics/bcftools.md
         - plink: bioinformatics/plink.md

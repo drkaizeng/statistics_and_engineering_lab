@@ -7,3 +7,10 @@ Sometimes when using `p`/`P` to paste, instead of pasting from the default `"` r
 set clipboard^=unnamed,unnamedplus
 ```
 This setting will allow (1) normal yanking and pasting within vim, (2) yanking things in vim and pasting the text in other apps, and (3) copying text from other apps and pasting it into vim.
+
+
+## Useful examples
+### Reindent the a section of the file
+We can quickly reindent a selected section of the file. The number of spaces to use for each step of (auto)indent is controlled by `shiftwidth` or `sw`.
+- To reindent the entire file, do the following in normal mode: `gg` (go to the top of the file), `=` (indent), `G` (go to the end of the file)
+- To indend a selected section, select the lines and then hit `=`.

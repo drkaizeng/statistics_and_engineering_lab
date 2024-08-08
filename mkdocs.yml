@@ -9,7 +9,8 @@ nav:
     - Home: index.md
     - Bash: 
         - Tips and examples: bash/tips_examples.md
-        - SSH: bash/ssh.md
+        - conda: bash/conda.md
+        - ssh: bash/ssh.md
         - vim: bash/vim.md
     - Bioinformatics:
         - bcftools: bioinformatics/bcftools.md

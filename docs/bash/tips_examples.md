@@ -39,6 +39,10 @@ Thus, in some cases, `.bashrc` needs to be explicitly sourced in the script.
     esac
     ```
 
+!!! important
+    Aliases are not expanded in non-interative shells.
+
+
 ## Skip the first N lines when printing a file
 ```
 tail -n +<N+1> <filename>  # N is the number of lines

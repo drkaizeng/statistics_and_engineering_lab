@@ -1,5 +1,23 @@
 # matplotlib examples
 
+## Legends
+### `Axes.legend`
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+_, ax = plt.subplots()
+handles = []
+for idx in range(1, 4):
+    h, = ax.plot(np.arange(10), 0.5 * idx * np.arange(10), label=f"line {idx}")  # mind the `,` after `h`
+    handles.append(h)
+ax.legend(handles=handles)
+plt.show()
+```
+![](./matplotlib_examples/axes_legend.png)
+
+
+
 ## Scatter plots
 ### Scatter plot with points on a colour scale and a colour bar
 ```python

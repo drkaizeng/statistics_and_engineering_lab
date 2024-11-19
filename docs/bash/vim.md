@@ -30,3 +30,25 @@ set clipboard^=unnamed,unnamedplus
 This setting will allow (1) normal yanking and pasting within vim, (2) yanking things in vim and pasting the text in other apps, and (3) copying text from other apps and pasting it into vim.
 
 
+## Macros
+### Applying a macro to multiple lines
+Based on [this](https://stackoverflow.com/questions/390174/in-vim-how-do-i-apply-a-macro-to-a-set-of-lines) Stack Overflow thread:
+- Execute the macro stored in register a on lines 5 through 10.
+```
+:5,10norm! @a
+```
+- Execute the macro stored in register a on lines 5 through the end of the file.
+```
+:5,$norm! @a
+```
+- Execute the macro stored in register a on all lines.
+```
+:%norm! @a
+```
+- Execute the macro store in register a on all lines matching pattern.
+```
+:g/pattern/norm! @a
+```
+- To execute the macro on visually selected lines, press V and the j or k until the desired region is selected. Then type `:norm! @a`.
+
+

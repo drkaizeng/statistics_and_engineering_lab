@@ -46,27 +46,48 @@ with pd.option_context('future.no_silent_downcasting', True):
 # c2     int64
 ```
 
+### `to_datetime()`
+For safety and clarity, a format should ***always*** be explicitly specified
+```python
+df = pd.DataFrame({"date": ["2020-01-02", "2020-01-23", np.nan]})
+# NA values does not cause error
+print(pd.to_datetime(df["date"], errors="raise", format="%Y-%m-%d"))
+# 0   2020-01-02
+# 1   2020-01-23
+# 2          NaT
+```
+
 
 ## Joining
 
-### Outer-joining indices and stacking columns
+### Outer-joining indices and stacking columns with identical names
 ```python
 df1 = pd.DataFrame({'A': [1, 2]}, index=['a', 'b'])
 df2 = pd.DataFrame({'A': [5, 6]}, index=["a", "c"])
 df3 = pd.DataFrame({'A': [7, 8], 'B': [10, 11]}, index=["a", "c"])
-
-# List of DataFrames
 dfs = [df1, df2, df3]
-
-# Concatenate DataFrames
 df = pd.concat(dfs, join="outer", axis=1)
-
 print(df)
-
 #      A    A    A     B
 # a  1.0  5.0  7.0  10.0
 # b  2.0  NaN  NaN   NaN
 # c  NaN  6.0  8.0  11.0
+
+print(df["A"])
+#      A    A    A
+# a  1.0  5.0  7.0
+# b  2.0  NaN  NaN
+# c  NaN  6.0  8.0
+print(df[["A"]])
+#      A    A    A
+# a  1.0  5.0  7.0
+# b  2.0  NaN  NaN
+# c  NaN  6.0  8.0
+print(df.drop(columns=["A"]))
+#       B
+# a  10.0
+# b   NaN
+# c  11.0
 ```
 
 
@@ -105,4 +126,35 @@ print(df1 | df4)
 # a   True  False
 # b  False  False
 # c  False  False
+```
+
+
+## Fancy indexing
+### Selecting elements from a data frame using a data frame of `bool`s
+```python
+df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "C": [7, 8, 9]})
+sel = pd.DataFrame({"A": [False, False, True], "B": [False, True, False], "C": [True, False, True]})
+sel1 = pd.DataFrame(
+    {"A": [False, False, True], "B": [False, True, False], "C": [True, False, True]}, index=["a", "b", "c"]
+)
+# Only works as expected when the index and columns labels match
+print(df[sel])
+#      A    B    C
+# 0  NaN  NaN  7.0
+# 1  NaN  5.0  NaN
+# 2  3.0  NaN  9.0
+print(df[sel1])
+#     A   B   C
+# 0 NaN NaN NaN
+# 1 NaN NaN NaN
+# 2 NaN NaN NaN
+
+# Unclear how/why this works
+print(df[sel.values])
+#    A  B  C
+# 0  1  4  7
+# 1  2  5  8
+# 2  3  6  9
+# 2  3  6  9
+
 ```

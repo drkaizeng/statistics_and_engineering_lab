@@ -19,6 +19,8 @@ nav:
         - Setting up mkdocs: misc/setting_up_mkdocs.md
     - Python:
         - Tips and examples: python/tips_examples.md
+        - matplotlib examples: python/matplotlib_examples.md
+        - pandas examples: python/pandas_examples.md
 
 markdown_extensions:
     - attr_list

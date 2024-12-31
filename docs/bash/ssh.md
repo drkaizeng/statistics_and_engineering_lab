@@ -53,3 +53,20 @@ git clone git@${host_name}:drkaizeng/stat_gen_playground.git
 # Update existing repos
 git remote set-url origin git@${host_name}:drkaizeng/stat_gen_playground.git
 ```
+
+
+
+## Starting `ssh-agent` automatically on login
+Based on this [ref](https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt), add the following to `.bash_profile`:
+```bash
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+  eval "$(ssh-agent -s)" > /dev/null
+  ssh-add -q [path_to_secret_files_if_they_have_non_default_names]
+fi
+```
+and the following to `.bash_logout` to kill the agent on logout:
+```bash
+if [ -n "$SSH_AUTH_SOCK" ] ; then
+  eval "$(ssh-agent -k)"
+fi
+```

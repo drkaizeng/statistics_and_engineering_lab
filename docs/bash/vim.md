@@ -1,4 +1,18 @@
 # vim
+## Installing plug-ins
+### [vim-plug](https://github.com/junegunn/vim-plug)
+For nvim:
+```bash
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+```
+```
+:PlugInstall to install the plugins
+:PlugUpdate to install or update the plugins
+:PlugDiff to review the changes from the last update
+:PlugClean to remove plugins no longer in the list
+```
+
 
 ## Registers
 ### Controls which register `vim` is pasting from.

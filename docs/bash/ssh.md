@@ -59,14 +59,35 @@ git remote set-url origin git@${host_name}:drkaizeng/stat_gen_playground.git
 ## Starting `ssh-agent` automatically on login
 Based on this [ref](https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt), add the following to `.bash_profile`:
 ```bash
-if [ -z "$SSH_AUTH_SOCK" ] ; then
-  eval "$(ssh-agent -s)" > /dev/null
-  ssh-add -q [path_to_secret_files_if_they_have_non_default_names]
+if [ -n "$SSH_AUTH_SOCK" ]; then
+    ids=$(pgrep ssh-agent)
+    # quote to prevent word split
+    if [ -n "$ids" ]; then
+	      # do not quote; otherwise no word split and the loop runs once
+	      for id in $ids; do
+	          SSH_AGENT_PID="$id"
+	          # `ssh-agent -k` relies on SSH_AGENT_PID being set
+	          export SSH_AGENT_PID
+	          eval "$(ssh-agent -k)" > /dev/null
+	      done
+    fi
 fi
+eval "$(ssh-agent -s)" > /dev/null
+ssh-add -q ~/.ssh/$name_of_secret_file
 ```
 and the following to `.bash_logout` to kill the agent on logout:
 ```bash
-if [ -n "$SSH_AUTH_SOCK" ] ; then
-  eval "$(ssh-agent -k)"
+if [ -n "$SSH_AUTH_SOCK" ]; then
+    ids=$(pgrep ssh-agent)
+    # quote to prevent word split
+    if [ -n "$ids" ]; then
+	      # do not quote; otherwise no word split and the loop runs once
+	      for id in $ids; do
+	          SSH_AGENT_PID="$id"
+	          # `ssh-agent -k` relies on SSH_AGENT_PID being set
+	          export SSH_AGENT_PID
+	          eval "$(ssh-agent -k)" > /dev/null
+	      done
+    fi
 fi
 ```

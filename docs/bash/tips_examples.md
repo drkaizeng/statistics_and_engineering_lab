@@ -48,3 +48,16 @@ Thus, in some cases, `.bashrc` needs to be explicitly sourced in the script.
 tail -n +<N+1> <filename>  # N is the number of lines
 tail -n +11 <filename>  # Skip the first 10 lines
 ```
+
+
+## `echo` complex strings
+To print `eval "$(register-python-argcomplete dx|sed 's/-o default//')"`, we break the string into
+- eval "$(register-python-argcomplete dx|sed 
+- '
+- s/-o default//
+- '
+- )"
+The single quotes are simply escaped and the other sub-strings are wrapped inside single quotes:
+```
+echo 'eval "$(register-python-argcomplete dx|sed '\''s/-o default//'\'')"'
+```

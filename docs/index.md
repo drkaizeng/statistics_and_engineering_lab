@@ -2,9 +2,9 @@
 Here is a collection of tips that are hopefully useful for statistical geneticists and bioinformaticians.
 
 ## Compute environments
-The environment for running `mkdocs` is specified by `docs/pyproject.toml`. This file determines `poetry.lock`, which is exported to `docs/requirements.txt`. 
+The environment for running `mkdocs` is specified by `docs/pyproject.toml`. This file determines `poetry.lock`, which is exported to `docs/requirements.txt` (for details see [here](misc/setting_up_mkdocs.md#setting-up-mkdocs)). 
 
-To run the code in `src`, first construct a docker image
+To run the code in `src` (mostly Python and C), first construct a docker image
 ```bash
 ./build_docker.sh
 ```

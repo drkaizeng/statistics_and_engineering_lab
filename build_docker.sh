@@ -1,8 +1,9 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eufo pipefail
 
-pushd "$(dirname "$0")"
+script_dir="$(dirname "$(realpath "$0")")"
+pushd "$script_dir"
 
 version=$(cat VERSION)
 # check that version string conforms to semantic versioning

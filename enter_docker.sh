@@ -33,6 +33,9 @@ docker run --rm -it \
     -v "${poetry_cache_dir}:/poetry-cache" \
     -v "${root_folder}:/root" \
     -w /workspace \
+    --user "$(id -u):$(id -g)" \
+    -e "POETRY_VENV_PATH=/poetry-venvs" \
+    -e "POETRY_CACHE_DIR=/poetry-cache" \
     "stat_gen_playground:$version" \
     bash
 

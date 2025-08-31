@@ -60,17 +60,7 @@ git remote set-url origin git@${host_name}:drkaizeng/stat_gen_playground.git
 Based on this [ref](https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt), add the following to `.bash_profile`:
 ```bash
 if [ -n "$SSH_AUTH_SOCK" ]; then
-    ids=$(pgrep ssh-agent)
-    # quote to prevent word split
-    if [ -n "$ids" ]; then
-	      # do not quote; otherwise no word split and the loop runs once
-	      for id in $ids; do
-	          SSH_AGENT_PID="$id"
-	          # `ssh-agent -k` relies on SSH_AGENT_PID being set
-	          export SSH_AGENT_PID
-	          eval "$(ssh-agent -k)" > /dev/null
-	      done
-    fi
+    pgrep -u "$USER" ssh-agent | xargs kill
 fi
 eval "$(ssh-agent -s)" > /dev/null
 ssh-add -q ~/.ssh/$name_of_secret_file

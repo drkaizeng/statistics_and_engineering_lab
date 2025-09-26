@@ -1,0 +1,2 @@
+# Rust projects
+I'm currently diving into Rust to explore the excitement around its unique combination of C-like performance and modern memory safety. Coming from C, Java, and Python, I'm particularly compelled by its efficiency, powerful generics, and reliable tooling. This section documents my journey: implementing core statistical methods and algorithms to master the language while reinforcing my quantitative engineering background.

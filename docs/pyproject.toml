@@ -1,6 +1,6 @@
 [tool.poetry]
 package-mode = false
-name = "stat-gen-playground"
+name = "statistics_and_engineering_lab"
 authors = ["kai <87151509+drkaizeng@users.noreply.github.com>"]
 readme = "README.md"
 

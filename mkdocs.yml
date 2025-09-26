@@ -1,4 +1,4 @@
-site_name: stat gen playground
+site_name: Kai's statistics & engineering lab
 
 theme:
     name: readthedocs
@@ -7,20 +7,21 @@ theme:
 
 nav:
     - Home: index.md
-    - Bash: 
-        - Tips and examples: bash/tips_examples.md
-        - conda: bash/conda.md
-        - ssh: bash/ssh.md
-        - vim: bash/vim.md
-    - Bioinformatics:
-        - bcftools: bioinformatics/bcftools.md
-        - plink: bioinformatics/plink.md
-    - Miscellaneous:
-        - Setting up mkdocs: misc/setting_up_mkdocs.md
-    - Python:
-        - Tips and examples: python/tips_examples.md
-        - matplotlib examples: python/matplotlib_examples.md
-        - pandas examples: python/pandas_examples.md
+    - Notes:
+        - Bash: 
+            - Tips and examples: bash/tips_examples.md
+            - conda: bash/conda.md
+            - ssh: bash/ssh.md
+            - vim: bash/vim.md
+        - Bioinformatics:
+            - bcftools: bioinformatics/bcftools.md
+            - plink: bioinformatics/plink.md
+        - Python:
+            - Tips and examples: python/tips_examples.md
+            - matplotlib examples: python/matplotlib_examples.md
+            - pandas examples: python/pandas_examples.md
+        - Miscellaneous:
+            - Setting up mkdocs: misc/setting_up_mkdocs.md
 
 markdown_extensions:
     - attr_list

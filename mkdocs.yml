@@ -22,6 +22,8 @@ nav:
             - pandas examples: python/pandas_examples.md
         - Miscellaneous:
             - Setting up mkdocs: misc/setting_up_mkdocs.md
+    - Rust projects:
+        - Linear regression: rust_projects/linear_regression.md
 
 markdown_extensions:
     - attr_list

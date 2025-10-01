@@ -1,0 +1,18 @@
+[project]
+name = "mcp-server-for-tabular-data"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "kai",email = "87151509+drkaizeng@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+]
+
+[tool.poetry]
+packages = [{include = "mcp_server_for_tabular_data", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

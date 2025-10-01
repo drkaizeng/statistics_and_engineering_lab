@@ -3,8 +3,6 @@ FROM python:3.13.6-slim-bookworm
 # Rust installation is based on rust:1.89.0-slim-bookworm
 # https://github.com/rust-lang/docker-rust/blob/97d440079ab3d6dc6895557f7a2a13c7280c5521/stable/bookworm/slim/Dockerfile
 
-LABEL org.opencontainers.image.source=https://github.com/rust-lang/docker-rust
-
 ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH \
@@ -49,6 +47,4 @@ RUN set -eux; \
         wget \
         curl \
         ; \
-    apt-get -qq autoremove; \
-    apt-get clean; \        
     rm -rf /var/lib/apt/lists/*;

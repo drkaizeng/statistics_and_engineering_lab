@@ -12,6 +12,6 @@ if ! [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     exit 1
 fi
 
-docker buildx build --tag "stat_gen_playground:$version" --file docker/Dockerfile .
+docker buildx build --tag "statistics_and_engineering_lab:$version" --file docker/Dockerfile .
 
 popd

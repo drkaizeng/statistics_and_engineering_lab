@@ -1,5 +1,5 @@
 # rust
-/rust_projects/target
+/rust_projects/**/target
 
 
 .DS_Store

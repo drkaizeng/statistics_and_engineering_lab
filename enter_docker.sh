@@ -36,7 +36,7 @@ docker run --rm -it \
     --user "$(id -u):$(id -g)" \
     -e "POETRY_VENV_PATH=/poetry-venvs" \
     -e "POETRY_CACHE_DIR=/poetry-cache" \
-    "stat_gen_playground:$version" \
+    "statistics_and_engineering_lab:$version" \
     bash
 
 popd

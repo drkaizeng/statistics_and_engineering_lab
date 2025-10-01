@@ -9,19 +9,19 @@ nav:
     - Home: index.md
     - Notes:
         - Bash: 
-            - Tips and examples: bash/tips_examples.md
-            - conda: bash/conda.md
-            - ssh: bash/ssh.md
-            - vim: bash/vim.md
+            - Tips and examples: notes/bash/tips_examples.md
+            - conda: notes/bash/conda.md
+            - ssh: notes/bash/ssh.md
+            - vim: notes/bash/vim.md
         - Bioinformatics:
-            - bcftools: bioinformatics/bcftools.md
-            - plink: bioinformatics/plink.md
+            - bcftools: notes/bioinformatics/bcftools.md
+            - plink: notes/bioinformatics/plink.md
         - Python:
-            - Tips and examples: python/tips_examples.md
-            - matplotlib examples: python/matplotlib_examples.md
-            - pandas examples: python/pandas_examples.md
+            - Tips and examples: notes/python/tips_examples.md
+            - matplotlib examples: notes/python/matplotlib_examples.md
+            - pandas examples: notes/python/pandas_examples.md
         - Miscellaneous:
-            - Setting up mkdocs: misc/setting_up_mkdocs.md
+            - Setting up mkdocs: notes/misc/setting_up_mkdocs.md
     - Rust projects:
         - Introduction: rust_projects/introduction.md
         - Linear regression: rust_projects/linear_regression.md

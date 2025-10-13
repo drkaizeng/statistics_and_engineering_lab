@@ -8,17 +8,19 @@ y = \beta_0 + \beta_1 x + \epsilon
 $$
 where $\epsilon \sim N(0, \sigma^2)$. Let the observations be $(x_i, y_i)$ (for $i$ = 1, ..., $n$). The estimates are
 $$
-\begin{align*}
-\widehat{\beta_1} &= \frac{\sum_{i=1}^n x_i y_i - n \bar{x} \bar{y}}{\sum_{i=1}^n x_i^2 - n\bar{x}}
-\\[10pt]
-\widehat{\beta_0} &= \bar{y} - \widehat{\beta_1} \bar{x}
-\\[10pt]
-\widehat{\sigma^2} &= \frac{\sum_{i=1}^n (y_i - \widehat{y_i})^2}{n - 2}
-\\[10pt]
-\text{var}(\widehat{\beta_1}) &= \frac{\widehat{\sigma^2}}{\sum_{i=1}^n (x_i - \bar{x})^2}
-\\[10pt]
-\text{var}(\widehat{\beta_0}) &= \widehat{\sigma^2} \Big[ \frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n (x_i - \bar{x})^2} \Big]
-\end{align*}
+\widehat{\beta_1} = \frac{\sum_{i=1}^n x_i y_i - n \bar{x} \bar{y}}{\sum_{i=1}^n x_i^2 - n\bar{x}}
+$$
+$$
+\widehat{\beta_0} = \bar{y} - \widehat{\beta_1} \bar{x}
+$$
+$$
+\widehat{\sigma^2} = \frac{\sum_{i=1}^n (y_i - \widehat{y_i})^2}{n - 2}
+$$
+$$
+\text{var}(\widehat{\beta_1}) = \frac{\widehat{\sigma^2}}{\sum_{i=1}^n (x_i - \bar{x})^2}
+$$
+$$
+\text{var}(\widehat{\beta_0}) = \widehat{\sigma^2} \Big[ \frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n (x_i - \bar{x})^2} \Big]
 $$
 
 where $\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$, $\bar{y} = \frac{1}{n} \sum_{i=1}^n y_i$, and $\widehat{y_i} = \widehat{\beta_0} + \widehat{\beta_1} x_i$.

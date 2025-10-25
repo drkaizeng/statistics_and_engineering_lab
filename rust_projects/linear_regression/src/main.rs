@@ -51,7 +51,7 @@ fn read_input_file(path: &PathBuf) -> Vec<(f64, f64)> {
     let reader = BufReader::new(file);
     let mut data = Vec::new();
     for (line_number, line) in reader.lines().enumerate() {
-        line_number += 1; // Make line numbers 1-based
+        let line_number = line_number + 1; // Make line numbers 1-based
         let line = match line {
             Ok(l) => l,
             Err(_) => panic!("Cannot read line {line_number}"),
@@ -122,5 +122,54 @@ mod tests {
         ];
         // Should panic
         let _ = parse_args(&args);
+    }
+
+    // ---- Tests for read_input_file ----
+    #[test]
+    fn test_read_input_file_ok() {
+        let tmp = std::env::temp_dir();
+        let path = tmp.join("read_ok.tsv");
+        std::fs::write(&path, "1\t2\n3.5\t4.5\n-1\t0\n").unwrap();
+        let data = read_input_file(&path);
+        assert_eq!(data.len(), 3);
+        assert_eq!(data[0], (1.0, 2.0));
+        assert_eq!(data[1], (3.5, 4.5));
+        assert_eq!(data[2], (-1.0, 0.0));
+    }
+
+    #[test]
+    #[should_panic(expected = "expected 2 values")]
+    fn test_read_input_file_bad_columns() {
+        let tmp = std::env::temp_dir();
+        let path = tmp.join("read_bad_cols.tsv");
+        std::fs::write(&path, "1\t2\t3\n").unwrap();
+        let _ = read_input_file(&path);
+    }
+
+    #[test]
+    #[should_panic(expected = "cannot parse value 'abc'")]
+    fn test_read_input_file_parse_error() {
+        let tmp = std::env::temp_dir();
+        let path = tmp.join("read_parse_err.tsv");
+        std::fs::write(&path, "abc\t2\n").unwrap();
+        let _ = read_input_file(&path);
+    }
+
+    #[test]
+    #[should_panic(expected = "is not finite")]
+    fn test_read_input_file_not_finite() {
+        let tmp = std::env::temp_dir();
+        let path = tmp.join("read_not_finite.tsv");
+        std::fs::write(&path, "NaN\t2\n").unwrap();
+        let _ = read_input_file(&path);
+    }
+
+    #[test]
+    #[should_panic(expected = "Cannot read")]
+    fn test_read_input_file_missing_file() {
+        let tmp = std::env::temp_dir();
+        let path = tmp.join("definitely_missing_lr.tsv");
+        assert!(!path.exists());
+        let _ = read_input_file(&path);
     }
 }

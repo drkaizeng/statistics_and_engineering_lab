@@ -1,0 +1,5 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./rust_projects/linear_regression/Cargo.toml",
+    ]
+}

@@ -8,7 +8,7 @@ y = \beta_0 + \beta_1 x + \epsilon
 $$
 where $\epsilon \sim N(0, \sigma^2)$. Let the independent observations be $(x_i, y_i)$ (for $i$ = 1, ..., $n$). The estimates are
 $$
-\widehat{\beta_1} = \frac{\sum_{i=1}^n x_i y_i - n \bar{x} \bar{y}}{\sum_{i=1}^n x_i^2 - n\bar{x}}
+\widehat{\beta_1} = \frac{\sum_{i=1}^n x_i y_i - n \bar{x} \bar{y}}{\sum_{i=1}^n x_i^2 - n\bar{x}^2}
 $$
 $$
 \widehat{\beta_0} = \bar{y} - \widehat{\beta_1} \bar{x}

@@ -9,12 +9,13 @@
             "type": "lldb",
             "request": "launch",
             "name": "Rust test",
-            "program": "${workspaceFolder}/rust_projects/linear_regression/target/debug/deps/linear_regression-cb4e294093b61da0",
+            "program": "${workspaceFolder}/rust_projects/linear_regression/target/debug/deps/linear_regression-9465548c7234f3b8",
             "args": [
-                "test_read_input_file_ok",
+                "test_do_linear_regression_simple_case",
                 "--nocapture"
             ],
             "cwd": "${workspaceFolder}/rust_projects/linear_regression",
+            "sourceLanguages": ["rust"]
         },
     ]
 }

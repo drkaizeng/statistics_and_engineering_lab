@@ -227,8 +227,80 @@ mod tests {
     fn test_do_linear_regression_simple_case() {
         let data = vec![(1.0, 2.0), (2.0, 3.0), (3.0, 4.0)];
         let results = do_linear_regression(&data);
-        assert_eq!(results.get("beta_0"), Some(&1.0));
         assert_eq!(results.get("beta_1"), Some(&1.0));
+        assert_eq!(results.get("var_beta_1"), Some(&0.0));
+        assert_eq!(results.get("beta_1_conf_low"), Some(&1.0));
+        assert_eq!(results.get("beta_1_conf_high"), Some(&1.0));
+        assert_eq!(results.get("beta_1_p_value"), Some(&0.0));
+        assert_eq!(results.get("beta_0"), Some(&1.0));
+        assert_eq!(results.get("var_beta_0"), Some(&0.0));
+        assert_eq!(results.get("beta_0_conf_low"), Some(&1.0));
+        assert_eq!(results.get("beta_0_conf_high"), Some(&1.0));
+        assert_eq!(results.get("beta_0_p_value"), Some(&0.0));
         assert_eq!(results.get("r_squared"), Some(&1.0));
+    }
+
+    #[test]
+    /// Data from Example 6.2 in Rencher and Schaalje (2008)
+    fn test_do_linear_regression_example_6_2() {
+        let data = vec![
+            (96.0, 95.0),
+            (77.0, 80.0),
+            (0.0, 0.0),
+            (0.0, 0.0),
+            (78.0, 79.0),
+            (64.0, 77.0),
+            (89.0, 72.0),
+            (47.0, 66.0),
+            (90.0, 98.0),
+            (93.0, 90.0),
+            (18.0, 0.0),
+            (86.0, 95.0),
+            (0.0, 35.0),
+            (30.0, 50.0),
+            (59.0, 72.0),
+            (77.0, 55.0),
+            (74.0, 75.0),
+            (67.0, 66.0),
+        ];
+        let results = do_linear_regression(&data);
+
+        fn format_f64(value: &f64, num_decimal_places: usize, scientific: bool) -> String {
+            if scientific {
+                return format!("{:.1$e}", value, num_decimal_places);
+            } else {
+                return format!("{:.1$}", value, num_decimal_places);
+            }
+        }
+        assert_eq!(
+            format_f64(results.get("beta_1").unwrap(), 4, false),
+            "0.8726"
+        );
+        // Difference due to rounding in the book. The \hat{sigma} (i.e. s in the book) is 13.85467
+        // sqrt(n_var_x) = 139.7532. These are agree with the book.
+        assert_eq!(
+            format_f64(results.get("var_beta_1").unwrap(), 5, false),
+            "0.00983"
+        );
+        assert_eq!(
+            format_f64(results.get("beta_1_conf_low").unwrap(), 4, false),
+            "0.6625"
+        );
+        assert_eq!(
+            format_f64(results.get("beta_1_conf_high").unwrap(), 4, false),
+            "1.0828"
+        );
+        assert_eq!(
+            format_f64(results.get("beta_1_p_value").unwrap(), 3, true),
+            "1.571e-7"
+        );
+        assert_eq!(
+            format_f64(results.get("beta_0").unwrap(), 2, false),
+            "10.73"
+        );
+        assert_eq!(
+            format_f64(results.get("r_squared").unwrap(), 4, false),
+            "0.8288"
+        );
     }
 }

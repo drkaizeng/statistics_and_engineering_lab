@@ -12,6 +12,9 @@ fn main() {
     println!("Output file: {}", output_path.display());
     let input_data = read_input_file(&input_file);
     println!("Read {} data points", input_data.len());
+    let results = do_linear_regression(&input_data);
+    write_results(&output_path, &results);
+    println!("Done");
 }
 
 /// Parses command line arguments and returns input and output file paths.
@@ -130,13 +133,25 @@ fn do_linear_regression(data: &Vec<(f64, f64)>) -> IndexMap<&str, f64> {
     results
 }
 
+fn write_results(output_path: &PathBuf, results: &IndexMap<&str, f64>) {
+    let mut file = match File::create(output_path) {
+        Ok(f) => f,
+        Err(_) => panic!("Cannot create output file {}", output_path.display()),
+    };
+    use std::io::Write;
+    for (key, value) in results.iter() {
+        writeln!(file, "{}\t{}", key, value).unwrap();
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use tempfile::tempdir;
 
     #[test]
     fn test_parse_args_ok() {
-        let tmp = std::env::temp_dir();
+        let tmp = tempdir().unwrap().keep();
         let input_path = tmp.join("lr_input.tsv");
         let output_path = tmp.join("lr_output.tsv");
         std::fs::write(&input_path, "1\t2\n").unwrap();
@@ -157,7 +172,7 @@ mod tests {
     #[test]
     #[should_panic(expected = "Input file does not exist")]
     fn test_parse_args_missing_input() {
-        let tmp = std::env::temp_dir();
+        let tmp = tempdir().unwrap().keep();
         let missing_input = tmp.join("definitely_missing_input.tsv");
         assert!(!missing_input.exists());
         let output_path = tmp.join("lr_output2.tsv");

@@ -26,6 +26,7 @@ nav:
         - Introduction: rust_projects/introduction.md
         - Linear regression: rust_projects/linear_regression.md
     - Python projects:
+        - MCP server for tabular data: python_projects/mcp_server_for_tabular_data.md
 
 markdown_extensions:
     - attr_list

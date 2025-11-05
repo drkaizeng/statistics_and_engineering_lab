@@ -10,7 +10,7 @@ fn main() {
     run(&args);
 }
 
-fn run(args: &[String]) -> () {
+fn run(args: &[String]) {
     let (input_file, output_path) = parse_args(&args);
     println!("Input file: {}", input_file.display());
     println!("Output file: {}", output_path.display());

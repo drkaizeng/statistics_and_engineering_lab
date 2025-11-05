@@ -7,6 +7,10 @@ use std::path::{Path, PathBuf};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    run(&args);
+}
+
+fn run(args: &[String]) -> () {
     let (input_file, output_path) = parse_args(&args);
     println!("Input file: {}", input_file.display());
     println!("Output file: {}", output_path.display());
@@ -85,6 +89,9 @@ fn read_input_file(path: &Path) -> Vec<(f64, f64)> {
         }
         data.push(xy);
     }
+    if data.len() <= 2 {
+        panic!("At least 3 data points are required for linear regression");
+    }
     data
 }
 
@@ -111,7 +118,8 @@ fn do_linear_regression(data: &[(f64, f64)]) -> IndexMap<&str, f64> {
 
     results.insert("beta_1", beta_1);
     results.insert("var_beta_1", var_beta_1);
-    let t_dist = StudentsT::new(0.0, 1.0, n - 2.0).unwrap();
+    let t_dist =
+        StudentsT::new(0.0, 1.0, n - 2.0).expect("Failed to create Student's t-distribution");
     let cutoff = t_dist.inverse_cdf(0.975);
     results.insert("beta_1_conf_low", beta_1 - cutoff * var_beta_1.sqrt());
     results.insert("beta_1_conf_high", beta_1 + cutoff * var_beta_1.sqrt());

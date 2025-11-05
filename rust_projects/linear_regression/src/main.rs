@@ -3,7 +3,7 @@ use statrs::distribution::{ContinuousCDF, StudentsT};
 use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -18,7 +18,7 @@ fn main() {
 }
 
 /// Parses command line arguments and returns input and output file paths.
-fn parse_args(args: &Vec<String>) -> (PathBuf, PathBuf) {
+fn parse_args(args: &[String]) -> (PathBuf, PathBuf) {
     if args.len() != 3 {
         panic!("Usage: linear_regression <input_file> <output_file>");
     }
@@ -51,7 +51,7 @@ fn parse_args(args: &Vec<String>) -> (PathBuf, PathBuf) {
 /// - any line does not have exactly two tab-separated values
 /// - any value cannot be parsed as f64
 /// - any value is not finite
-fn read_input_file(path: &PathBuf) -> Vec<(f64, f64)> {
+fn read_input_file(path: &Path) -> Vec<(f64, f64)> {
     let file = match File::open(path) {
         Ok(f) => f,
         Err(_) => panic!("Cannot read {}", path.display()),
@@ -88,7 +88,7 @@ fn read_input_file(path: &PathBuf) -> Vec<(f64, f64)> {
     data
 }
 
-fn do_linear_regression(data: &Vec<(f64, f64)>) -> IndexMap<&str, f64> {
+fn do_linear_regression(data: &[(f64, f64)]) -> IndexMap<&str, f64> {
     let mut results = IndexMap::new();
     let n = data.len() as f64;
     let mean_x = data.iter().map(|&(x, _)| x).sum::<f64>() / n;

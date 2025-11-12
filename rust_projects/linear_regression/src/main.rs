@@ -345,4 +345,40 @@ mod tests {
         assert_eq!(format_f64(results.beta_0, 2, false), "10.73");
         assert_eq!(format_f64(results.r_squared, 4, false), "0.8288");
     }
+
+    #[test]
+    fn test_run_simple_case() {
+        // Create temp input/output files using simple perfect linear data y = x + 1
+        let tmp_dir = tempfile::tempdir().unwrap();
+        let input_path = tmp_dir.path().join("run_input.tsv");
+        let output_path = tmp_dir.path().join("run_output.tsv");
+        std::fs::write(&input_path, "1\t2\n2\t3\n3\t4\n").unwrap();
+        assert!(!output_path.exists());
+
+        let args = vec![
+            "prog".to_string(),
+            input_path.to_string_lossy().into(),
+            output_path.to_string_lossy().into(),
+        ];
+        run(&args);
+
+        assert!(output_path.exists(), "run() did not create output file");
+        let contents = std::fs::read_to_string(&output_path).unwrap();
+        let mut beta_0_found = false;
+        let mut beta_1_found = false;
+        for line in contents.lines() {
+            if let Some(rest) = line.strip_prefix("beta_0\t") {
+                let v: f64 = rest.parse().unwrap();
+                assert!((v - 1.0).abs() < 1e-12, "beta_0 expected 1.0 got {v}");
+                beta_0_found = true;
+            }
+            if let Some(rest) = line.strip_prefix("beta_1\t") {
+                let v: f64 = rest.parse().unwrap();
+                assert!((v - 1.0).abs() < 1e-12, "beta_1 expected 1.0 got {v}");
+                beta_1_found = true;
+            }
+        }
+        assert!(beta_0_found, "beta_0 line not found in output");
+        assert!(beta_1_found, "beta_1 line not found in output");
+    }
 }

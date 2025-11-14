@@ -195,6 +195,9 @@ fn write_results(output_path: &PathBuf, results: &LinearRegressionResult) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    // Learning notes:
+    // use crate::*; // The same as using super::*;
+    // use linear_regression::*;  // If there is code in src/lib.rs, this will bring them in.
     use tempfile::tempdir;
 
     #[test]

@@ -1,4 +1,4 @@
-# Linear regression (in prog)
+# Linear regression
 My first Rust project. I chose to implement simple linear regression to focus on learning Rust's syntax, ownership system, and tooling without the overhead of complex matrix operations. By the same token, the standard library was used, except for calculations involving the t-distribution. The mathematical treatment follows Rencher and Schaalje (2008).
 
 ## The model
@@ -39,7 +39,7 @@ $$
 ### Input
 The input is a header-less TSV file with two columns. Each row defines an observation $(x_i, y_i)$. Any missing or irregular data will cause the program to exit.
 
-## Output
+### Output
 A TSV file with informative row labels.
 
 

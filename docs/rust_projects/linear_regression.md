@@ -39,6 +39,9 @@ $$
 ### Input
 The input is a header-less TSV file with two columns. Each row defines an observation $(x_i, y_i)$. Any missing or irregular data will cause the program to exit.
 
+## Output
+A TSV file with informative row labels.
+
 
 
 

@@ -7,27 +7,9 @@ theme:
 
 nav:
     - Home: index.md
-    - Notes:
-        - Bash: 
-            - Tips and examples: notes/bash/tips_examples.md
-            - conda: notes/bash/conda.md
-            - ssh: notes/bash/ssh.md
-            - vim: notes/bash/vim.md
-        - Bioinformatics:
-            - bcftools: notes/bioinformatics/bcftools.md
-            - plink: notes/bioinformatics/plink.md
-        - Python:
-            - Tips and examples: notes/python/tips_examples.md
-            - matplotlib examples: notes/python/matplotlib_examples.md
-            - pandas examples: notes/python/pandas_examples.md
-        - Miscellaneous:
-            - Setting up mkdocs: notes/misc/setting_up_mkdocs.md
     - Rust projects:
         - Introduction: rust_projects/introduction.md
         - Linear regression: rust_projects/linear_regression.md
-        - Data structures: rust_projects/data_structures.md
-    - Python projects:
-        - MCP server for tabular data: python_projects/mcp_server_for_tabular_data.md
 
 markdown_extensions:
     - attr_list

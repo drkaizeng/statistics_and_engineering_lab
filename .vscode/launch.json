@@ -11,7 +11,7 @@
             "name": "Rust test",
             "program": "${workspaceFolder}/rust_projects/linear_regression/target/debug/deps/linear_regression-9465548c7234f3b8",
             "args": [
-                "test_do_linear_regression_simple_case",
+                "test_do_linear_regression_example_6_2",
                 "--nocapture"
             ],
             "cwd": "${workspaceFolder}/rust_projects/linear_regression",

@@ -1,1 +1,0 @@
-# MCP server for tabular data (in prep)

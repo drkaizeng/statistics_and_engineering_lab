@@ -1,2 +1,0 @@
-# Setting up `mkdocs`
-The environment for running `mkdocs` is specified by `docs/pyproject.toml`. This file determines `poetry.lock`, which is exported to `docs/requirements.txt`. For more details about the set-up, please visit my other website named [fingers_in_the_pi](https://fingers-in-the-pi.readthedocs.io/en/latest/initial_setup/python_setup/#readthedocs-setup).

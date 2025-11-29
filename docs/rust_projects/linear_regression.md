@@ -1,5 +1,17 @@
 # Linear regression
+
+**Project status:** Active development  
+
 My first Rust project. I chose to implement simple linear regression to focus on learning Rust's syntax, ownership system, and tooling without the overhead of complex matrix operations. By the same token, the standard library was used, except for calculations involving the t-distribution. The mathematical treatment follows Rencher and Schaalje (2008).
+
+
+## Roadmap
+- [x] Learn basic Rust syntax and implement simple linear regression as a binary crate with a command line interface (CLI).
+- [x] Implement a full suite of unit and integration tests.
+- [ ] Set up CI using Github Actions.
+- [ ] Containerise the CLI tool using docker.
+- [ ] Refactor and seperate the code into a binary crate and a library crate.
+- [ ] Write Python API wrapper for the library crate.
 
 ## The model
 Consider the model
@@ -36,11 +48,9 @@ $$
 
 
 ## The implementation
-### Input
-The input is a header-less TSV file with two columns. Each row defines an observation $(x_i, y_i)$. Any missing or irregular data will cause the program to exit.
-
-### Output
-A TSV file with informative row labels.
+### Input/output
+- The input is a header-less TSV file with two columns. Each row defines an observation $(x_i, y_i)$. Any missing or irregular data will cause the program to exit.
+- A TSV file with informative row labels.
 
 
 

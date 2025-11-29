@@ -34,7 +34,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           # this action does not use default.run because it is a "uses" step
-          workspace: "rust_projects/linear_regression -> target"
+          workspaces: "rust_projects/linear_regression -> target"
 
       - name: Check Formatting
         run: cargo fmt --all -- --check

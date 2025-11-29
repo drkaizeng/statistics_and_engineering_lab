@@ -13,6 +13,7 @@ My first Rust project. I chose to implement simple linear regression to focus on
 - [ ] Refactor and seperate the code into a binary crate and a library crate.
 - [ ] Write Python API wrapper for the library crate.
 
+
 ## The model
 Consider the model
 $$

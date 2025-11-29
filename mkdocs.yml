@@ -8,15 +8,17 @@ theme:
 nav:
     - Home: index.md
     - Rust projects:
-        - Introduction: rust_projects/introduction.md
-        - Linear regression: rust_projects/linear_regression.md
+          - Introduction: rust_projects/introduction.md
+          - Linear regression: rust_projects/linear_regression.md
 
 markdown_extensions:
     - attr_list
     # Enable highlighted note/important blocks
     - admonition
-    - pymdownx.arithmatex:  # for rendering LaTeX math
-        generic: true 
+    - pymdownx.arithmatex: # for rendering LaTeX math
+          generic: true
+    - pymdownx.tasklist:
+          custom_checkbox: true
 
-extra_javascript:  # for rendering LaTeX math
+extra_javascript: # for rendering LaTeX math
     - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

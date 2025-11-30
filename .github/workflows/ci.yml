@@ -16,6 +16,8 @@ jobs:
   test_rust_linear_regression:
     name: Test Rust Linear Regression Project
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write    
 
     defaults:
       run:

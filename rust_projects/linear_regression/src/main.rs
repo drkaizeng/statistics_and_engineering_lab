@@ -10,7 +10,7 @@ fn main() {
 }
 
 fn run(args: &[String]) {
-    let (input_file, output_path) = parse_args(&args);
+    let (input_file, output_path) = parse_args(args);
     println!("Input file: {}", input_file.display());
     println!("Output file: {}", output_path.display());
     let input_data = read_input_file(&input_file);
@@ -333,9 +333,9 @@ mod tests {
 
         fn format_f64(value: f64, num_decimal_places: usize, scientific: bool) -> String {
             if scientific {
-                return format!("{:.1$e}", value, num_decimal_places);
+                format!("{:.1$e}", value, num_decimal_places)
             } else {
-                return format!("{:.1$}", value, num_decimal_places);
+                format!("{:.1$}", value, num_decimal_places)
             }
         }
         assert_eq!(format_f64(results.beta_1, 4, false), "0.8726");

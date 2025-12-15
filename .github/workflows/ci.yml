@@ -81,6 +81,12 @@ jobs:
       - name: Build and smoke test Docker image
         run: |
           version=$(grep -m1 '^version =' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
-          docker buildx build -t linear_regression:"$version" -f docker/Dockerfile .
+          docker buildx build --load -t linear_regression:"$version" -f docker/Dockerfile .
           output=$(docker run --rm linear_regression:"$version" 2>&1)
           echo "$output"
+          if [[ "$output" == *"Usage: linear_regression <input_file> <output_file>"* ]]; then
+            echo "Smoke test passed."
+          else
+            echo "Smoke test failed."
+            exit 1
+          fi

@@ -84,6 +84,7 @@ jobs:
         run: |
           version=$(grep -m1 '^version =' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
           image_name="${DOCKER_USER}/stats-eng-lab-rust-linear-regression:$version"
+          echo "Building Docker image: $image_name"
           docker buildx build --output=type=registry --output=type=docker -t "$image_name" -f docker/Dockerfile .
           output=$(docker run --rm "$image_name" 2>&1) || true
 

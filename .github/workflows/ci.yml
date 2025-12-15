@@ -70,24 +70,22 @@ jobs:
     defaults:
       run:
         working-directory: ./rust_projects/linear_regression
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3      
-      
+        uses: docker/setup-buildx-action@v3
+
       - name: Build and smoke test Docker image
         run: |
           version=$(grep -m1 '^version =' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
           docker build -t linear_regression:"$version" -f docker/Dockerfile .
-          output=$(docker run --rm linear_regression:"$version")
+          output=$(docker run --rm linear_regression:"$version" 2>&1)
           if [[ "$output" == *"Usage: linear_regression <input_file> <output_file>"* ]]; then
             echo "Smoke test passed."
           else
             echo "Smoke test failed."
             exit 1
           fi
-
-

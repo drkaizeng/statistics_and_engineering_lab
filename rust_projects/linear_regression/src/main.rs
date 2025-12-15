@@ -1,5 +1,5 @@
 use statrs::distribution::{ContinuousCDF, StudentsT};
-use std::env;
+use std::{env, process};
 use std::fs::File;
 use std::io::{BufRead, BufReader, Write};
 use std::path::{Path, PathBuf};
@@ -23,7 +23,8 @@ fn run(args: &[String]) {
 /// Parses command line arguments and returns input and output file paths.
 fn parse_args(args: &[String]) -> (PathBuf, PathBuf) {
     if args.len() != 3 {
-        panic!("Usage: linear_regression <input_file> <output_file>");
+        eprintln!("Usage: linear_regression <input_file> <output_file>");
+        process::exit(1);   
     }
 
     let input = &args[1];

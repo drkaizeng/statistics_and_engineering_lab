@@ -1,8 +1,8 @@
 use statrs::distribution::{ContinuousCDF, StudentsT};
-use std::{env, process};
 use std::fs::File;
 use std::io::{BufRead, BufReader, Write};
 use std::path::{Path, PathBuf};
+use std::{env, process};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -24,7 +24,7 @@ fn run(args: &[String]) {
 fn parse_args(args: &[String]) -> (PathBuf, PathBuf) {
     if args.len() != 3 {
         eprintln!("Usage: linear_regression <input_file> <output_file>");
-        process::exit(1);   
+        process::exit(1);
     }
 
     let input = &args[1];

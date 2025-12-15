@@ -82,11 +82,15 @@ jobs:
         run: |
           version=$(grep -m1 '^version =' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
           docker buildx build --load -t linear_regression:"$version" -f docker/Dockerfile .
-          output=$(docker run --rm linear_regression:"$version" 2>&1)
+          output=$(docker run --rm linear_regression:"$version" 2>&1) || true
+          
+          echo "--- DEBUG: Container Output ---"
           echo "$output"
+          echo "-------------------------------"
+
           if [[ "$output" == *"Usage: linear_regression <input_file> <output_file>"* ]]; then
             echo "Smoke test passed."
           else
-            echo "Smoke test failed."
+            echo "Smoke test failed. Output did not match expectation."
             exit 1
-          fi
+          fi          

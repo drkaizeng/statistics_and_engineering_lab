@@ -64,7 +64,7 @@ jobs:
 
   build_and_smoke_test_docker_image:
     name: Build and Smoke Test Docker Image for Rust Linear Regression Project
-    # needs: test_rust_linear_regression
+    needs: test_rust_linear_regression
     runs-on: ubuntu-latest
 
     defaults:
@@ -83,8 +83,8 @@ jobs:
           version=$(grep -m1 '^version =' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
           docker buildx build --load -t linear_regression:"$version" -f docker/Dockerfile .
           output=$(docker run --rm linear_regression:"$version" 2>&1) || true
-          
-          echo "--- DEBUG: Container Output ---"
+
+          echo "--- Container Output ---"
           echo "$output"
           echo "-------------------------------"
 
@@ -93,4 +93,4 @@ jobs:
           else
             echo "Smoke test failed. Output did not match expectation."
             exit 1
-          fi          
+          fi

@@ -64,7 +64,7 @@ jobs:
 
   build_and_smoke_test_docker_image:
     name: Build and Smoke Test Docker Image for Rust Linear Regression Project
-    needs: test_rust_linear_regression
+    # needs: test_rust_linear_regression
     runs-on: ubuntu-latest
 
     defaults:

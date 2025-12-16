@@ -55,13 +55,13 @@ $$
 
 ### Running the tool
 First pull the image from Docker Hub, replacing `version_number` with the number in `rust_projects/linear_regression/Cargo.toml`:
-```
-docker pull drkaizeng/stats-eng-lab-rust-linear-regression:{version_number}
+```bash
+docker pull drkaizeng/stats-eng-lab-rust-linear-regression:${version_number}
 ```
 
 Assuming that the input data are stored in a file named `input.tsv`, on a Mac or Linux machine, the following command can be used to run the program and store the results in a file named `output.tsv` in the same folder
-```
-docker run -v "${PWD}":/data -w /data --user "$(id -u):$(id -g)" drkaizeng/stats-eng-lab-rust-linear-regression:0.0.1 input.tsv output.tsv
+```bash
+docker run -v "${PWD}":/data -w /data --user "$(id -u):$(id -g)" drkaizeng/stats-eng-lab-rust-linear-regression:${version_number} input.tsv output.tsv
 ```
 
 

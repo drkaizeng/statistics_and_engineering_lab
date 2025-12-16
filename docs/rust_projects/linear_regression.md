@@ -48,7 +48,7 @@ t_j = \frac{ \widehat{\beta_j} }{\sqrt{\text{var}(\widehat{\beta_j})}}
 $$
 
 
-## Using the programming
+## Using the program
 ### Input/output
 - The input is a header-less TSV file with two columns. Each row defines an observation $(x_i, y_i)$. Any missing or irregular data will cause the program to exit.
 - Output: A TSV file with informative row labels.

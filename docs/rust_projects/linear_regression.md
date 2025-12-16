@@ -9,7 +9,7 @@ My first Rust project. I chose to implement simple linear regression to focus on
 - [x] Learn basic Rust syntax and implement simple linear regression as a binary crate with a command line interface (CLI).
 - [x] Implement a full suite of unit and integration tests.
 - [x] Set up CI using Github Actions.
-- [ ] Containerise the CLI tool using docker.
+- [x] Containerise the CLI tool using docker.
 - [ ] Refactor and seperate the code into a binary crate and a library crate.
 - [ ] Write Python API wrapper for the library crate.
 
@@ -48,12 +48,21 @@ t_j = \frac{ \widehat{\beta_j} }{\sqrt{\text{var}(\widehat{\beta_j})}}
 $$
 
 
-## The implementation
+## Using the programming
 ### Input/output
 - The input is a header-less TSV file with two columns. Each row defines an observation $(x_i, y_i)$. Any missing or irregular data will cause the program to exit.
-- A TSV file with informative row labels.
+- Output: A TSV file with informative row labels.
 
+### Running the tool
+First pull the image from Docker Hub, replacing `version_number` with the number in `rust_projects/linear_regression/Cargo.toml`:
+```
+docker pull drkaizeng/stats-eng-lab-rust-linear-regression:{version_number}
+```
 
+Assuming that the input data are stored in a file named `input.tsv`, on a Mac or Linux machine, the following command can be used to run the program and store the results in a file named `output.tsv` in the same folder
+```
+docker run -v "${PWD}":/data -w /data --user "$(id -u):$(id -g)" drkaizeng/stats-eng-lab-rust-linear-regression:0.0.1 input.tsv output.tsv
+```
 
 
 

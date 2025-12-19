@@ -1,4 +1,4 @@
-use linear_regression::{do_linear_regression, LinearRegressionResult};
+use linear_regression::{LinearRegressionResult, do_linear_regression};
 use std::fs::File;
 use std::io::{BufRead, BufReader, Write};
 use std::path::{Path, PathBuf};
@@ -94,7 +94,6 @@ fn read_input_file(path: &Path) -> Vec<(f64, f64)> {
     }
     data
 }
-
 
 fn write_results(output_path: &PathBuf, results: &LinearRegressionResult) {
     let mut file = match File::create(output_path) {

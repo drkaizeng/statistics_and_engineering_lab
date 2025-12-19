@@ -10,7 +10,7 @@ My first Rust project. I chose to implement simple linear regression to focus on
 - [x] Implement a full suite of unit and integration tests.
 - [x] Set up CI using Github Actions.
 - [x] Containerise the CLI tool using docker.
-- [ ] Refactor and seperate the code into a binary crate and a library crate.
+- [x] Refactor and seperate the code into a binary crate and a library crate.
 - [ ] Write Python API wrapper for the library crate.
 
 

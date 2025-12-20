@@ -55,7 +55,7 @@ fn parse_args(args: &[String]) -> (PathBuf, PathBuf) {
 /// - any line does not have exactly two tab-separated values
 /// - any value cannot be parsed as f64
 /// - any value is not finite
-fn read_input_file(path: &Path) -> Vec<(f64, f64)> {
+fn read_input_file(path: &Path) -> Vec<f64> {
     let file = match File::open(path) {
         Ok(f) => f,
         Err(_) => panic!("Cannot read {}", path.display()),
@@ -72,7 +72,7 @@ fn read_input_file(path: &Path) -> Vec<(f64, f64)> {
         if parts.len() != 2 {
             panic!("Line {line_number}: expected 2 values, got {}", parts.len());
         }
-        let mut xy = (0.0f64, 0.0f64);
+        let mut xy = [0.0f64, 0.0f64];
         for (i, part) in parts.iter().enumerate() {
             let value: f64 = match part.parse() {
                 Ok(v) => v,
@@ -81,18 +81,14 @@ fn read_input_file(path: &Path) -> Vec<(f64, f64)> {
             if !value.is_finite() {
                 panic!("Line {line_number}: value '{}' is not finite", part);
             }
-            if i == 0 {
-                xy.0 = value;
-            } else {
-                xy.1 = value;
-            }
+            xy[i] = value;
         }
         data.push(xy);
     }
     if data.len() <= 2 {
         panic!("At least 3 data points are required for linear regression");
     }
-    data
+    data.as_flattened().to_vec()
 }
 
 fn write_results(output_path: &PathBuf, results: &LinearRegressionResult) {
@@ -160,10 +156,8 @@ mod tests {
         let path = tmp.join("read_ok.tsv");
         std::fs::write(&path, "1\t2\n3.5\t4.5\n-1\t0\n").unwrap();
         let data = read_input_file(&path);
-        assert_eq!(data.len(), 3);
-        assert_eq!(data[0], (1.0, 2.0));
-        assert_eq!(data[1], (3.5, 4.5));
-        assert_eq!(data[2], (-1.0, 0.0));
+        assert_eq!(data.len(), 6);
+        assert_eq!(data, vec![1.0, 2.0, 3.5, 4.5, -1.0, 0.0]);
     }
 
     #[test]

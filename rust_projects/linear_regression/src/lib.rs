@@ -46,7 +46,7 @@ iterable_struct!(LinearRegressionResult<f64> {
 /// # Arguments
 ///
 /// * `data` - A slice of f64 numbers. There should be an even number of elements,
-///            where each consecutive pair represents an (x, y) data point.
+///   where each consecutive pair represents an (x, y) data point.
 pub fn do_linear_regression(data: &[f64]) -> LinearRegressionResult {
     let (chunks, _) = data.as_chunks::<2>();
     let n = data.len() as f64 / 2.0;
@@ -107,8 +107,7 @@ mod tests {
 
     #[test]
     fn test_do_linear_regression_simple_case() {
-        let data = vec![[1.0, 2.0], [2.0, 3.0], [3.0, 4.0]];
-        let data = data.as_flattened();
+        let data = vec![1.0, 2.0, 2.0, 3.0, 3.0, 4.0];
         let results = do_linear_regression(&data);
         assert_eq!(results.beta_1, 1.0);
         assert_eq!(results.var_beta_1, 0.0);
@@ -147,7 +146,7 @@ mod tests {
             [67.0, 66.0],
         ];
         let data = data.as_flattened();
-        let results = do_linear_regression(&data);
+        let results = do_linear_regression(data);
 
         fn format_f64(value: f64, num_decimal_places: usize, scientific: bool) -> String {
             if scientific {

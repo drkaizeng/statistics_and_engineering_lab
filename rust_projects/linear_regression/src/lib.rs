@@ -38,18 +38,28 @@ iterable_struct!(LinearRegressionResult<f64> {
     r_squared,
 });
 
-pub fn do_linear_regression(data: &[(f64, f64)]) -> LinearRegressionResult {
-    let n = data.len() as f64;
-    let mean_x = data.iter().map(|&(x, _)| x).sum::<f64>() / n;
-    let mean_y = data.iter().map(|(_, y)| y).sum::<f64>() / n;
-    let sum_x_sq = data.iter().map(|&(x, _)| x.powi(2)).sum::<f64>();
-    let sum_xy = data.iter().map(|&(x, y)| x * y).sum::<f64>();
+/// Perform linear regression on the provided data points.
+///
+/// IMPORTANT: This is considered a low-level implementation and does not check that the input data
+///     slice is non-empty and have an even number of elements.
+///
+/// # Arguments
+///
+/// * `data` - A slice of f64 numbers. There should be an even number of elements,
+///   where each consecutive pair represents an (x, y) data point.
+pub fn do_linear_regression(data: &[f64]) -> LinearRegressionResult {
+    let (chunks, _) = data.as_chunks::<2>();
+    let n = data.len() as f64 / 2.0;
+    let mean_x = chunks.iter().map(|&[x, _]| x).sum::<f64>() / n;
+    let mean_y = chunks.iter().map(|&[_, y]| y).sum::<f64>() / n;
+    let sum_x_sq = chunks.iter().map(|&[x, _]| x.powi(2)).sum::<f64>();
+    let sum_xy = chunks.iter().map(|&[x, y]| x * y).sum::<f64>();
     let beta_1 = (sum_xy - n * mean_x * mean_y) / (sum_x_sq - n * mean_x.powi(2));
     let beta_0 = mean_y - beta_1 * mean_x;
-    let bar_y: Vec<f64> = data.iter().map(|&(x, _)| beta_0 + beta_1 * x).collect();
-    let sigma_sq = data
+    let bar_y: Vec<f64> = chunks.iter().map(|&[x, _]| beta_0 + beta_1 * x).collect();
+    let sigma_sq = chunks
         .iter()
-        .map(|&(_, y)| y)
+        .map(|&[_, y]| y)
         .zip(bar_y.iter())
         .map(|(y, bar_y)| (y - bar_y).powi(2))
         .sum::<f64>()
@@ -70,7 +80,10 @@ pub fn do_linear_regression(data: &[(f64, f64)]) -> LinearRegressionResult {
     let beta_0_p_value = 2.0 * (1.0 - t_dist.cdf(beta_0.abs() / var_beta_0.sqrt()));
 
     let ssr = bar_y.iter().map(|&x| (x - mean_y).powi(2)).sum::<f64>();
-    let sst = data.iter().map(|&(_, y)| (y - mean_y).powi(2)).sum::<f64>();
+    let sst = chunks
+        .iter()
+        .map(|&[_, y]| (y - mean_y).powi(2))
+        .sum::<f64>();
     let r_squared = ssr / sst;
 
     LinearRegressionResult {
@@ -94,7 +107,7 @@ mod tests {
 
     #[test]
     fn test_do_linear_regression_simple_case() {
-        let data = vec![(1.0, 2.0), (2.0, 3.0), (3.0, 4.0)];
+        let data = vec![1.0, 2.0, 2.0, 3.0, 3.0, 4.0];
         let results = do_linear_regression(&data);
         assert_eq!(results.beta_1, 1.0);
         assert_eq!(results.var_beta_1, 0.0);
@@ -113,26 +126,27 @@ mod tests {
     /// Data from Example 6.2 in Rencher and Schaalje (2008)
     fn test_do_linear_regression_example_6_2() {
         let data = vec![
-            (96.0, 95.0),
-            (77.0, 80.0),
-            (0.0, 0.0),
-            (0.0, 0.0),
-            (78.0, 79.0),
-            (64.0, 77.0),
-            (89.0, 72.0),
-            (47.0, 66.0),
-            (90.0, 98.0),
-            (93.0, 90.0),
-            (18.0, 0.0),
-            (86.0, 95.0),
-            (0.0, 35.0),
-            (30.0, 50.0),
-            (59.0, 72.0),
-            (77.0, 55.0),
-            (74.0, 75.0),
-            (67.0, 66.0),
+            [96.0, 95.0],
+            [77.0, 80.0],
+            [0.0, 0.0],
+            [0.0, 0.0],
+            [78.0, 79.0],
+            [64.0, 77.0],
+            [89.0, 72.0],
+            [47.0, 66.0],
+            [90.0, 98.0],
+            [93.0, 90.0],
+            [18.0, 0.0],
+            [86.0, 95.0],
+            [0.0, 35.0],
+            [30.0, 50.0],
+            [59.0, 72.0],
+            [77.0, 55.0],
+            [74.0, 75.0],
+            [67.0, 66.0],
         ];
-        let results = do_linear_regression(&data);
+        let data = data.as_flattened();
+        let results = do_linear_regression(data);
 
         fn format_f64(value: f64, num_decimal_places: usize, scientific: bool) -> String {
             if scientific {

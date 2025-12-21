@@ -8,6 +8,6 @@ name = "linear_regression_python_bindings" # This is the name used in 'linear_re
 crate-type = ["cdylib"]
 
 [dependencies]
-linear_regression = { path = "../linear_regression" }
+linear_regression = { path = "../linear_regression", version = "0.0.3" }
 numpy = "0.27.1"
 pyo3 = "0.27.2"

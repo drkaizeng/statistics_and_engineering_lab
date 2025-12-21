@@ -1,19 +1,14 @@
-use linear_regression;
 use numpy::PyReadonlyArray1;
+use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use std::collections::HashMap;
 
 /// Perform linear regression on the provided data points.
 ///
-/// IMPORTANT: This is considered a low-level implementation. The caller must ensure that the input data
-/// meets the requirements:
-/// - non-empty
-/// - even number of elements
-/// - none of the elements are NaN or infinite
-///
 /// # Arguments
 ///
-/// * `data` - An array of f64 numbers.
+/// * `data` - An array of f64 numbers. It must be non-empty, have an even number of elements,
+///   and contain NaN or infinite.
 ///
 /// # Returns
 ///
@@ -22,13 +17,18 @@ use std::collections::HashMap;
 fn do_linear_regression(data: PyReadonlyArray1<f64>) -> PyResult<HashMap<String, f64>> {
     let slice = data
         .as_slice()
-        .expect("Failed to convert input array to slice");
-    let r = linear_regression::do_linear_regression(slice);
-    let mut res = HashMap::new();
-    for (key, value) in r.iter() {
-        res.insert(key.to_string(), value);
+        .map_err(|_| PyValueError::new_err("Input array must be contiguous"))?;
+    if slice.is_empty() {
+        return Err(PyValueError::new_err("Input array must be non-empty"));
     }
-    Ok(res)
+    if slice.len() % 2 != 0 {
+        return Err(PyValueError::new_err("Input array must have an even number of elements"));
+    }
+    if slice.iter().any(|x| x.is_nan() || x.is_infinite()) {
+        return Err(PyValueError::new_err("Input array must not contain NaN or infinite values"));
+    }
+    let r = linear_regression::do_linear_regression(slice);
+    Ok(r.iter().map(|(k, v)| (k.to_string(), v)).collect())
 }
 
 #[pymodule]

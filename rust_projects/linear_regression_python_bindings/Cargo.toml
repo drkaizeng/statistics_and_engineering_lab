@@ -4,9 +4,10 @@ version = "0.0.1"
 edition = "2024"
 
 [lib]
-name = "rust_linear_regression_lib" # This is the name used in 'rust_linear_regression_lib'
+name = "linear_regression_python_bindings" # This is the name used in 'linear_regression_python_bindings'
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.22", features = ["extension-module"] }
 linear_regression = { path = "../linear_regression" }
+numpy = "0.27.1"
+pyo3 = "0.27.2"

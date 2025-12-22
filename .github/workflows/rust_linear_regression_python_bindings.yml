@@ -53,7 +53,7 @@ jobs:
           uv run pytest --junitxml report.xml --cov=src --cov-report=xml:coverage.xml
       
       - name: Show test report
-        uses: dorny/test-reported@v2
+        uses: dorny/test-reporter@v2
         if: success() || failure()
         with:
           name: Test results

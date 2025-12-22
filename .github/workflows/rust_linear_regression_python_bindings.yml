@@ -51,3 +51,24 @@ jobs:
       - name: Run tests
         run: |
           uv run pytest --junitxml report.xml --cov=src --cov-report=xml:coverage.xml
+      
+      - name: Show test report
+        uses: dorny/test-reported@v2
+        if: success() || failure()
+        with:
+          name: Test results
+          path: ./python_projects/linear_regression/report.xml
+          reporter: java-junit
+      
+      - name: Show test coverage
+        uses: 5monkeys/cobertura-action@v14
+        with:
+          path: ./python_projects/linear_regression/coverage.xml
+          minimum_coverage: 75
+          skip_covered: false
+          fail_below_threshold: true
+          show_missing: true
+          show_line: true
+          show_branch: true
+          link_missing_lines: true
+          link_missing_lines_source_dir: ./python_projects/linear_regression/src

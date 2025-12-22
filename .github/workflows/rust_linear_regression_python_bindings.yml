@@ -25,7 +25,10 @@ jobs:
           - "3.13"
           - "3.14"
     permissions:
+      # All 3 all needed for cobertura
+      contents: read
       pull-requests: write
+      checks: write 
 
     defaults:
       run:

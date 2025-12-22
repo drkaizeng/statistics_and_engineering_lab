@@ -1,0 +1,53 @@
+name: rust_linear_regression_python_bindings
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "rust_projects/linear_regression_python_bindings/**"
+      - ".github/workflows/rust_linear_regression_python_bindings.yml"
+  push:
+    tags:
+      - "python/linear_regression/v*.*.*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test Rust Linear Regression Python Bindings
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.13"
+          - "3.14"
+
+    defaults:
+      run:
+        working-directory: ./python_projects/linear_regression
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install repo
+        run: |
+          uv sync --locked --all-extras
+
+      - name: Run tests
+        run: |
+          uv run pytest --junitxml report.xml --cov=src --cov-report=xml:coverage.xml
+
+      - name: Linting and format/type checks
+        run: |
+          uv run ruff check
+          uv run ruff format --check
+          uv run ty check

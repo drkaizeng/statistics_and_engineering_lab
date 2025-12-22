@@ -84,11 +84,10 @@ jobs:
           uv venv test-env
           source test-env/bin/activate
           uv pip install dist/*.whl
-          output=$(linear-regression 2>&1)
-          echo "$output"
-          # pattern="^Usage: linear-regression"
-          # if [[ ! "$output" =~ $pattern ]]; then
-          #   echo "Unexpected output"
-          #   exit 1
-          # fi
+          output=$(linear-regression 2>&1) || true
+          pattern="^Usage: linear-regression"
+          if [[ ! "$output" =~ $pattern ]]; then
+            echo "Unexpected output"
+            exit 1
+          fi
           deactivate

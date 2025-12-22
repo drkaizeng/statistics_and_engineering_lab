@@ -42,12 +42,12 @@ jobs:
         run: |
           uv sync --locked --all-extras
 
-      - name: Run tests
-        run: |
-          uv run pytest --junitxml report.xml --cov=src --cov-report=xml:coverage.xml
-
       - name: Linting and format/type checks
         run: |
           uv run ruff check
           uv run ruff format --check
           uv run ty check
+
+      - name: Run tests
+        run: |
+          uv run pytest --junitxml report.xml --cov=src --cov-report=xml:coverage.xml

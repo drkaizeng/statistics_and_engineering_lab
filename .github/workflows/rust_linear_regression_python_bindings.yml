@@ -16,14 +16,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Test Rust Linear Regression Python Bindings
+  test_and_build:
+    name: Test and Build Rust Linear Regression Python Bindings
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version:
           - "3.13"
           - "3.14"
+    permissions:
+      pull-requests: write
 
     defaults:
       run:

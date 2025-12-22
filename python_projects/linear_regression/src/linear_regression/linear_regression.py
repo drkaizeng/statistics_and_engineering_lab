@@ -3,7 +3,8 @@ from pathlib import Path
 
 import click
 import numpy as np
-from linear_regression.linear_regression_python_bindings import do_linear_regression
+
+from linear_regression.linear_regression_python_bindings import do_linear_regression  # ty: ignore[unresolved-import]
 
 
 @click.command()

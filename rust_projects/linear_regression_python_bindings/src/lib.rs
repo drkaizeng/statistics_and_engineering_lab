@@ -1,7 +1,6 @@
 use numpy::PyReadonlyArray1;
 use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
-use std::collections::HashMap;
 
 /// Perform linear regression on the provided data points.
 ///
@@ -12,9 +11,10 @@ use std::collections::HashMap;
 ///
 /// # Returns
 ///
-/// A dictionary mapping result field names to their f64 values.
+/// A vector (mapped to a list in Python) of tuples. The first element of a tuple is the name
+/// of the output quantity, and the second element is the value.
 #[pyfunction]
-fn do_linear_regression(data: PyReadonlyArray1<f64>) -> PyResult<HashMap<String, f64>> {
+fn do_linear_regression(data: PyReadonlyArray1<f64>) -> PyResult<Vec<(&'static str, f64)>> {
     let slice = data
         .as_slice()
         .map_err(|_| PyValueError::new_err("Input array must be contiguous"))?;
@@ -28,7 +28,7 @@ fn do_linear_regression(data: PyReadonlyArray1<f64>) -> PyResult<HashMap<String,
         return Err(PyValueError::new_err("Input array must not contain NaN or infinite values"));
     }
     let r = linear_regression::do_linear_regression(slice);
-    Ok(r.iter().map(|(k, v)| (k.to_string(), v)).collect())
+    Ok(r.iter().map(|(k, v)| (k, v)).collect())
 }
 
 #[pymodule]

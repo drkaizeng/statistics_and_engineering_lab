@@ -51,7 +51,7 @@ jobs:
       - name: Run tests
         run: |
           uv run pytest --junitxml report.xml --cov=src --cov-report=xml:coverage.xml
-      
+
       - name: Show test report
         uses: dorny/test-reporter@v2
         if: success() || failure()
@@ -59,9 +59,9 @@ jobs:
           name: Test results
           path: ./python_projects/linear_regression/report.xml
           reporter: java-junit
-      
+
       - name: Show test coverage
-        uses: 5monkeys/cobertura-action@v14
+        uses: 5monkeys/cobertura-action@master
         with:
           path: ./python_projects/linear_regression/coverage.xml
           minimum_coverage: 75
@@ -72,3 +72,16 @@ jobs:
           show_branch: true
           link_missing_lines: true
           link_missing_lines_source_dir: ./python_projects/linear_regression/src
+
+      - name: Build and test Python wheel
+        run: |
+          uv build
+          uv venv test-env
+          source test-env/bin/activate
+          uv pip install dist/*.whl
+          output=$(linear-regression 2>&1)
+          pattern="^Usage: linear-regression"
+          if [[ ! "$output" =~ $pattern ]]; then
+            echo "Unexpected output"
+            exit 1
+          fi

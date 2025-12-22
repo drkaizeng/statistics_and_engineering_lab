@@ -24,3 +24,12 @@ build-backend = "maturin"
 
 [tool.maturin]
 manifest-path = "../../rust_projects/linear_regression_python_bindings/Cargo.toml"
+# Tell maturin where the Python source code is located
+python-source = "src"
+# Specify the name of the rust extension module.
+# This would result in a file named linear_regression_python_bindings.so (or .pyd on Windows) in
+# the linear_regression package.
+module-name = "linear_regression.linear_regression_python_bindings"
+
+[project.scripts]
+linear-regression = "linear_regression.linear_regression:linear_regression"

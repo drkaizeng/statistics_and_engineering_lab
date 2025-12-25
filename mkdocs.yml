@@ -11,6 +11,8 @@ nav:
     - Rust projects:
           - Introduction: rust_projects/introduction.md
           - Linear regression: rust_projects/linear_regression.md
+    - Python projects:
+          - Linear regression: python_projects/linear_regression.md
 
 markdown_extensions:
     - attr_list

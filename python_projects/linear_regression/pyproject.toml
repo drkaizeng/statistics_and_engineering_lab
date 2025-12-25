@@ -4,8 +4,12 @@ version = "0.0.1"
 description = "A Python wrapper around rust_projects/linear_regression."
 authors = [{ name = "Kai Zeng" }]
 readme = "README.md"
+license-files = ["LICENCE"]
 requires-python = ">=3.13"
 dependencies = ["click>=8.3.1", "numpy>=2.4.0"]
+
+[project.urls]
+Homepage = "https://statistics-and-engineering-lab.readthedocs.io/en/latest/python_projects/linear_regression/"
 
 [dependency-groups]
 dev = ["pytest>=9.0.2", "pytest-cov>=7.0.0", "ruff>=0.14.10", "ty>=0.0.5"]

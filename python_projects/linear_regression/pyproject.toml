@@ -1,20 +1,14 @@
 [project]
-name = "linear-regression"
+name = "drkaizeng-linear-regression"
 version = "0.0.1"
 description = "A Python wrapper around rust_projects/linear_regression."
+authors = [{ name = "Kai Zeng" }]
+readme = "README.md"
 requires-python = ">=3.13"
-dependencies = [
-    "click>=8.3.1",
-    "numpy>=2.4.0",
-]
+dependencies = ["click>=8.3.1", "numpy>=2.4.0"]
 
 [dependency-groups]
-dev = [
-    "pytest>=9.0.2",
-    "pytest-cov>=7.0.0",
-    "ruff>=0.14.10",
-    "ty>=0.0.5",
-]
+dev = ["pytest>=9.0.2", "pytest-cov>=7.0.0", "ruff>=0.14.10", "ty>=0.0.5"]
 
 [tool.ruff]
 line-length = 120

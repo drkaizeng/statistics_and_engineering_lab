@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: Current File with Arguments",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--input-tsv=/Users/kai.zeng/tmp/test_input.tsv",
+                "--output-tsv=/Users/kai.zeng/tmp/test_output.tsv",
+                "--overwrite"
+            ]
+        },
+        {
             // Run cargo test --no-run in the terminal to build tests first
             "type": "lldb",
             "request": "launch",
@@ -15,7 +27,9 @@
                 "--nocapture"
             ],
             "cwd": "${workspaceFolder}/rust_projects/linear_regression",
-            "sourceLanguages": ["rust"]
+            "sourceLanguages": [
+                "rust"
+            ]
         },
     ]
 }

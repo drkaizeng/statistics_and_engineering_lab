@@ -93,7 +93,7 @@ jobs:
         with:
           command: build
           working-directory: ./python_projects/linear_regression
-          args: --release --out dist --sdist --locked
+          args: --release --out dist --sdist --locked --interpreter ${{ matrix.python-version }}
           manylinux: auto
 
       - name: Test Python wheel

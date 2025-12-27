@@ -16,6 +16,12 @@ on:
         # This should contain all artifacts to be published
         required: true
         type: string
+      git_tag_ref:
+        # Simply pass in github.ref
+        # It must start "refs/tags" and ends with "v*.*.*", where "*.*.*" is the version number
+        # This is an explicit parameter to make it clear
+        required: true
+        type: string
 
 jobs:
   resolve_inputs:
@@ -30,6 +36,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+
+      - name: Ensure version consistency
+        run: |
+          version=$(grep -m1 "^version = " pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          # Remove everything up to and including the last 'v'
+          tag_version=${{ inputs.git_tag_ref }}
+          tag_version=${tag_version##*/v}
+          if [[ "$version" != "$tag_version" ]]; then
+            echo "Version mismatch: pyproject.toml version is $version but tag version is $tag_version"
+            exit 1
+          fi
 
       - name: Get parameters
         id: get_params
@@ -66,7 +83,7 @@ jobs:
           name: ${{ inputs.artifact_download_name }}
           path: ./dist/
       - name: Show artifacts
-        run: tree ./dist
+        run: ls -R ./dist
       - name: Publish to PyPI/TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

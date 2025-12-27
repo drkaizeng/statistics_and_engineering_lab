@@ -70,6 +70,7 @@ jobs:
 
       - name: Show test coverage
         uses: 5monkeys/cobertura-action@master
+        # There are problems if this is run when pushing a tag
         if: github.event_name == 'pull_request'
         with:
           path: ./python_projects/linear_regression/coverage.xml

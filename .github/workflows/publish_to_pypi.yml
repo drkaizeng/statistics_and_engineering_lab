@@ -40,9 +40,20 @@ jobs:
       - name: Ensure version consistency
         run: |
           version=$(grep -m1 "^version = " pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+
+          git_tag_ref=${{ inputs.git_tag_ref }}
+          # Do not quote the regex pattern
+          if [[ ! "$git_tag_ref" =~ ^refs/tags ]]; then
+            echo "git_tag_ref must start with refs/tags"
+            exit 1
+          fi
+          if [[ ! "$git_tag_ref" =~ v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "git_tag_ref must end in v*.*.* where *.*.* is the version number"
+            exit 1
+          fi
+          
           # Remove everything up to and including the last 'v'
-          tag_version=${{ inputs.git_tag_ref }}
-          tag_version=${tag_version##*/v}
+          tag_version=${git_tag_ref##*/v}
           if [[ "$version" != "$tag_version" ]]; then
             echo "Version mismatch: pyproject.toml version is $version but tag version is $tag_version"
             exit 1

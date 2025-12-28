@@ -1,32 +1,34 @@
 site_name: Kai's statistics & engineering lab
 
 theme:
-    name: material
-    features:
-        - content.code.copy
-        - toc.follow
+  name: material
+  features:
+    - content.code.copy
+    - toc.follow
 
 nav:
-    - Home: index.md
-    - Rust projects:
-          - Introduction: rust_projects/introduction.md
-          - Linear regression: rust_projects/linear_regression.md
-    - Python projects:
-          - Linear regression: python_projects/linear_regression.md
+  - Home: index.md
+  - Rust projects:
+      - Introduction: rust_projects/introduction.md
+      - Linear regression: rust_projects/linear_regression.md
+  - Python projects:
+      - Linear regression: python_projects/linear_regression.md
 
 markdown_extensions:
-    - attr_list
-    # Enable highlighted note/important blocks
-    - admonition
-    - pymdownx.arithmatex: # for rendering LaTeX math
-          generic: true
-    # For enabling checkboxes in task lists
-    - pymdownx.tasklist:
-          custom_checkbox: true
-    - pymdownx.highlight:
-          anchor_linenums: true
-    - pymdownx.inlinehilite
-    - pymdownx.superfences
+  - attr_list
+  # Enable highlighted note/important blocks
+  - admonition
+  - pymdownx.arithmatex: # for rendering LaTeX math
+      generic: true
+  # For enabling checkboxes in task lists
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed: # for enabling tabbed contents
+      alternate_style: true
 
 extra_javascript: # for rendering LaTeX math
-    - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

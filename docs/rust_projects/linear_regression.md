@@ -1,6 +1,6 @@
 # Linear regression
 
-**Project status:** Active development  
+**Project status:** Complete
 
 My first Rust project. I chose to implement simple linear regression to focus on learning Rust's syntax, ownership system, and tooling without the overhead of complex matrix operations. By the same token, the standard library was used, except for calculations involving the t-distribution. The mathematical treatment follows Rencher and Schaalje (2008).
 

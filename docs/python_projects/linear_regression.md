@@ -2,7 +2,7 @@
 
 **Project status:** Complete
 
-This work is part of my first Rust project (see [here](../rust_projects/linear_regression.md)). The aim is to learn how to write Python bindings for Rust code.
+This work is part of my first Rust project (see [here](../rust_projects/linear_regression.md)). The aim is to learn how to write Python bindings for Rust code, combining the high-performance Rust kernel and Python flexibility with enterprise-grade DevOps.
 
 
 ## Roadmap

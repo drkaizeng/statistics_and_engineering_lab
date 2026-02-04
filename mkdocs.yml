@@ -13,6 +13,7 @@ nav:
       - Linear regression: rust_projects/linear_regression.md
   - Python projects:
       - Linear regression: python_projects/linear_regression.md
+      - Mendelian randomisation: python_projects/mendelian_randomisation.md
 
 markdown_extensions:
   - attr_list

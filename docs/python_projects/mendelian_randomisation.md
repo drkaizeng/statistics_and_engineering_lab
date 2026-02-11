@@ -85,7 +85,7 @@ digraph MR {
 }
 ```
 
-The confounder U is not a problem in this case because G (due to the random assortment of alleles during reproduction) is independent of U. This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 
+The confounder U is not a problem in this case because G is independent of U (due to the random assortment of alleles during reproduction). This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 
 
 
 ## Theory: The Inverse-Variance Weighted (IVW) Estimator Using GWAS Summary Statistics

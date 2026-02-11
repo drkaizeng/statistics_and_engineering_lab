@@ -28,27 +28,61 @@ IVs are genetic variants that are associated with the exposure. This name comes 
 ### Mathematical principles of MR
 Let $X$ be the exposure, $Y$ be the outcome. The question of interest is whether $X$ has a causal effect on $Y$. This can be represented using a directed acyclic graph (DAG) as follows:
 
-```mermaid
-graph LR
-    X["X (Exposure)"] --> Y["Y (Outcome)"]
+```kroki-graphviz
+digraph MR {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fillcolor="#e8e8ff", fontname="Helvetica"];
+    edge [fontname="Helvetica", fontsize=10];
+
+    X [label="X (Exposure)"];
+    Y [label="Y (Outcome)"];
+
+    { rank=same; X; Y; }
+
+    X -> Y [label="        "];
+}
 ```
 
 Establishing causality from $X$ to $Y$ is challenging. For instance, although it is easy to test whether $X$ and $Y$ are correlated, correlation does not imply causation. Another common issue is confounding, where a third variable $U$ influences both $X$ and $Y$, leading to a spurious association between $X$ and $Y$. An example of this is the relationship between smoking and lung cancer, where socioeconomic status could be a confounder. In this case, individuals with lower socioeconomic status may be more likely to smoke and also have a higher risk of lung cancer due to factors such as limited access to healthcare and increased exposure to environmental pollutants. This may in turn lead to higher rates of lung cancer among smokers, even if we were to assume smoking itself is not the direct cause of lung cancer (despite the fact that it is). This can be represented in a DAG as follows, where a question mark is used to indicate that the causal relationship between $X$ and $Y$ is uncertain:
 
-```mermaid
-graph LR
-    X["X (Exposure)"] --> |?| Y["Y (Outcome)"]
-    U["U (Confounder)"] -.-> X
-    U -.-> Y
+```kroki-graphviz
+digraph MR {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fillcolor="#e8e8ff", fontname="Helvetica"];
+    edge [fontname="Helvetica", fontsize=10];
+
+    U [label="U (Confounder)"];
+    X [label="X (Exposure)"];
+    Y [label="Y (Outcome)"];
+
+    { rank=same; X; Y; }
+
+    U -> X [style=dashed];
+    U -> Y [style=dashed];
+    X -> Y [label="   ?    "];
+}
 ```
 
 The key idea of MR is to use genetic variants (G) as IVs. If G is associated with X, but has no direct effect on Y. Then, if we observe an association between G and Y, we can infer that X has a causal effect on Y. This can be represented in a DAG as follows:
 
-```mermaid
-graph LR
-    G["G (Genetic Variant; instrumental variable [IV])"] --> X["X (Exposure)"] --> Y["Y (Outcome)"]
-    U["U (Confounder)"] -.-> X
-    U -.-> Y
+```kroki-graphviz
+digraph MR {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fillcolor="#e8e8ff", fontname="Helvetica"];
+    edge [fontname="Helvetica", fontsize=10];
+
+    U [label="U (Confounder)"];
+    G [label="G (Genetic variant as IV)"];
+    X [label="X (Exposure)"];
+    Y [label="Y (Outcome)"];
+
+    { rank=same; G; X; Y; }
+
+    U -> X [style=dashed];
+    U -> Y [style=dashed];
+    G -> X [label="        "];
+    X -> Y [label="        "];
+}
 ```
 
 The confounder U is not a problem in this case because G (due to the random assortment of alleles during reproduction) is independent of U. This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 

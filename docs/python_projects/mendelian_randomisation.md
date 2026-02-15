@@ -87,6 +87,38 @@ digraph MR {
 
 The confounder U is not a problem in this case because G is independent of U (due to the random assortment of alleles during reproduction). This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 
 
+For simplicity, assume that both $X$ and $Y$ are quantitative traits and can be modelled using standard linear models:
+$$
+X = \alpha + \beta_{GX} G + \epsilon_X \\
+Y = \gamma^* + \beta_{XY} X + \epsilon_Y^*
+$$
+where $\alpha$ and $\gamma^*$ are intercepts, $\beta_{GX}$ is the effect of the genetic variant on the exposure, $\beta_{XY}$ is the causal effect of the exposure on the outcome, and $\epsilon_X$ and $\epsilon_Y^*$ are error terms, where $E(\epsilon_X) = E(\epsilon_Y^*) = 0$.
+
+Because $G$ has no direct effect on $Y$ (i.e., it only affects $Y$ through $X$), we can derive the following relationship:
+
+$$
+\begin{aligned}
+Y &= \gamma^* + \beta_{XY} (\alpha + \beta_{GX} G + \epsilon_X) + \epsilon_Y^* \\
+&= \gamma^* + \beta_{XY} \alpha + \beta_{XY} \beta_{GX} G + \beta_{XY} \epsilon_X + \epsilon_Y^*
+\end{aligned}
+$$
+
+Defining $\gamma = \gamma^* + \beta_{XY} \alpha$, $\epsilon_Y = \beta_{XY} \epsilon_X + \epsilon_Y^*$, and $\beta_{GY} = \beta_{XY} \beta_{GX}$, we can rewrite the equation for $Y$ as:
+
+$$
+Y = \gamma + \beta_{GY} G + \epsilon_Y
+$$
+
+Thus, we can estimate the causal effect $\beta_{XY}$ as
+$$
+\beta_{XY} = \frac{\beta_{GY}}{\beta_{GX}}
+$$
+
+We can identify genetic variants that are associated with $X$ and $Y$ by performing genome-wide association studies (GWAS). The GWAS summary statistics provide estimates of $\beta_{GX}$ and $\beta_{GY}$, which can be used to estimate the causal effect $\beta_{XY}$ using the formula above. When data from multiple genetic variants are available, the above equation suggests that the data points $(\beta_{GX}^{(1)}, \beta_{GY}^{(1)})$, $(\beta_{GX}^{(2)}, \beta_{GY}^{(2)})$, ..., $(\beta_{GX}^{(n)}, \beta_{GY}^{(n)})$ should lie on a line with slope $\beta_{XY}$, where the superscript denotes the index of the genetic variant. This in turn suggests that we can obtain a more precise estimate of $\beta_{XY}$ by combining the estimates from multiple genetic variants. One common method for doing this is the Inverse-Variance Weighted (IVW) estimator.
+
+
+
+
 
 ## Theory: The Inverse-Variance Weighted (IVW) Estimator Using GWAS Summary Statistics
 

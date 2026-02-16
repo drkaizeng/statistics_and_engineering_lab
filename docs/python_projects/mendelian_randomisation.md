@@ -4,7 +4,7 @@
 
 
 ## Roadmap
-- [ ] **Theory**: Document the statistical foundations of Mendelian Randomization (MR), specifically focusing on estimators that use summary statistics from genome-wide association studies (GWAS).
+- [x] **Theory**: Document the statistical foundations of Mendelian Randomization (MR), specifically focusing on estimators that use summary statistics from genome-wide association studies (GWAS).
 - [ ] **Development**: Architect and implement a Python package for Inverse-Variance Weighted (IVW) estimation.
 - [ ] **Automation**: Configure a CI/CD pipeline for automated testing and deployment to PyPI.
 

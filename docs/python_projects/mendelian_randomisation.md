@@ -114,7 +114,9 @@ $$
 \beta_{XY} = \frac{\beta_{GY}}{\beta_{GX}}
 $$
 
-We can identify genetic variants that are associated with $X$ and $Y$ by performing genome-wide association studies (GWAS). The GWAS summary statistics provide estimates of $\beta_{GX}$ and $\beta_{GY}$, which can be used to estimate the causal effect $\beta_{XY}$ using the formula above. When data from multiple genetic variants are available, the above equation suggests that the data points $(\beta_{GX}^{(1)}, \beta_{GY}^{(1)})$, $(\beta_{GX}^{(2)}, \beta_{GY}^{(2)})$, ..., $(\beta_{GX}^{(n)}, \beta_{GY}^{(n)})$ should lie on a line with slope $\beta_{XY}$, where the superscript denotes the index of the genetic variant. This in turn suggests that we can obtain a more precise estimate of $\beta_{XY}$ by combining the estimates from multiple genetic variants. One common method for doing this is the Inverse-Variance Weighted (IVW) estimator.
+We can identify genetic variants that are associated with $X$ and $Y$ by performing genome-wide association studies (GWAS), which also provide estimates of $\beta_{GX}$ and $\beta_{GY}$ needed for estimating the causal effect $\beta_{XY}$ using the formula above. When data from multiple unlinked genetic variants are available, the above equation suggests that the data points $(\beta_{GX}^{(1)}, \beta_{GY}^{(1)})$, $(\beta_{GX}^{(2)}, \beta_{GY}^{(2)})$, ..., $(\beta_{GX}^{(n)}, \beta_{GY}^{(n)})$ should lie on a line with slope $\beta_{XY}$, where the superscript denotes the index of the genetic variant. This observation means that, with GWAS summary statistics widely available, we can combine data from multiple variants from multiple GWASs to obtain a more precise estimate of $\beta_{XY}$. A challenge is to take into account of the fact that different GWASs often have different sample sizes and thus provide estimates with different levels of precision. One common method for doing this is the Inverse-Variance Weighted (IVW) estimator, detailed below.
+
+#### The Inverse-Variance Weighted (IVW) estimator
 
 
 

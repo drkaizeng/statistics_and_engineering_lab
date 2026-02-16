@@ -110,6 +110,7 @@ Y = \gamma + \beta_{GY} G + \epsilon_Y
 $$
 
 Thus, if we have estimates $\widehat{\beta}_{GX}$ and $\widehat{\beta}_{GY}$, we can estimate the causal effect $\beta_{XY}$ as
+
 $$
 \widehat{\beta}_{XY} = \frac{\widehat{\beta}_{GY}}{\widehat{\beta}_{GX}}
 $$
@@ -139,6 +140,7 @@ $$
 $$
 
 where $L$ is the number of genetic variants used as IVs. The variance of the IVW estimator can be estimated as follows:
+
 $$
 \text{Var}(\widehat{\beta}_{XY}^{(\text{IVW})}) = \frac{1}{\sum_{i=1}^L \widehat{\beta}_{GX}^{(i)2} / \sigma_{GY}^{(i)2}}
 $$

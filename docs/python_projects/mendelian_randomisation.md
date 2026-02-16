@@ -109,26 +109,49 @@ $$
 Y = \gamma + \beta_{GY} G + \epsilon_Y
 $$
 
-Thus, we can estimate the causal effect $\beta_{XY}$ as
+Thus, if we have estimates $\widehat{\beta}_{GX}$ and $\widehat{\beta}_{GY}$, we can estimate the causal effect $\beta_{XY}$ as
 $$
-\beta_{XY} = \frac{\beta_{GY}}{\beta_{GX}}
+\widehat{\beta}_{XY} = \frac{\widehat{\beta}_{GY}}{\widehat{\beta}_{GX}}
 $$
 
-We can identify genetic variants that are associated with $X$ and $Y$ by performing genome-wide association studies (GWAS), which also provide estimates of $\beta_{GX}$ and $\beta_{GY}$ needed for estimating the causal effect $\beta_{XY}$ using the formula above. When data from multiple unlinked genetic variants are available, the above equation suggests that the data points $(\beta_{GX}^{(1)}, \beta_{GY}^{(1)})$, $(\beta_{GX}^{(2)}, \beta_{GY}^{(2)})$, ..., $(\beta_{GX}^{(n)}, \beta_{GY}^{(n)})$ should lie on a line with slope $\beta_{XY}$, where the superscript denotes the index of the genetic variant. This observation means that, with GWAS summary statistics widely available, we can combine data from multiple variants from multiple GWASs to obtain a more precise estimate of $\beta_{XY}$. A challenge is to take into account of the fact that different GWASs often have different sample sizes and thus provide estimates with different levels of precision. One common method for doing this is the Inverse-Variance Weighted (IVW) estimator, detailed below.
+Genome-wide association studies (GWAS) allow for the quantification of associations between a genetic variant and traits $X$ and $Y$, yielding the estimates $\widehat{\beta}_{GX}$ and $\widehat{\beta}_{GY}$. When data from multiple unlinked genetic variants are available, the above equation suggests that the data points $(\widehat{\beta}_{GX}^{(1)}, \widehat{\beta}_{GY}^{(1)})$, $(\widehat{\beta}_{GX}^{(2)}, \widehat{\beta}_{GY}^{(2)})$, ..., $(\widehat{\beta}_{GX}^{(n)}, \widehat{\beta}_{GY}^{(L)})$ should lie on a line with slope $\widehat{\beta}_{XY}$, where the superscript denotes the index of the genetic variant. This means that, with GWAS summary statistics widely available, we can combine data from multiple variants from multiple GWASs to obtain a more precise estimate of $\widehat{\beta}_{XY}$, so long as these different studies are from comparable populations, such that if we were able to test for association between the genetic variants and the traits of interest across all these studies, the causal effect estimates are the same across the studies (bar differences caused by differences in sample sizes). One common method for combining multiple estimates this is the Inverse-Variance Weighted (IVW) estimator, detailed below.
 
 #### The Inverse-Variance Weighted (IVW) estimator
+The causal effect estimates obtained from different genetic variants vary in precision due to differences in sample sizes and allele frequencies. The IVW estimator is a method for combining these estimates that gives more weight to those with higher precision (i.e., lower variance). Let $\sigma_{GX}^{(i)}$ and $\sigma_{GY}^{(i)}$ be the standard errors of $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$, respectively. For notational clarity, we will drop the superscript $(i)$ in the following. The variance of the ratio estimator $\widehat{\beta}_{XY} = \widehat{\beta}_{GY} / \widehat{\beta}_{GX}$ can be approximated using the delta method as follows:
 
+$$
+\begin{aligned}
+\text{Var}(\widehat{\beta}_{XY})
+&\approx \frac{\sigma_{GY}^2}{\widehat{\beta}_{GX}^2} + \frac{\widehat{\beta}_{GY}^2 \sigma_{GX}^2}{\widehat{\beta}_{GX}^4} - 2 \frac{\widehat{\beta}_{GY} \text{Cov}(\widehat{\beta}_{GX}, \widehat{\beta}_{GY})}{\widehat{\beta}_{GX}^3}
+\end{aligned}
+$$
 
+When the estimates $\widehat{\beta}_{GX}$ and $\widehat{\beta}_{GY}$ are obtained from independent samples, the covariance term is zero. Further, the estimate $\widehat{\beta}_{GX}$ is often much more precise than $\widehat{\beta}_{GY}$ (i.e., $\sigma_{GX}^2$ is much smaller than $\sigma_{GY}^2$). When these two conditions hold, we have
 
+$$
+\text{Var}(\widehat{\beta}_{XY}) \approx \frac{\sigma_{GY}^2}{\widehat{\beta}_{GX}^2}
+$$
 
+Weighting each estimate $\widehat{\beta}_{XY}^{(i)}$ by the inverse of its variance, we can obtain the IVW estimator as follows (Burgess et al., 2013):
 
-## Theory: The Inverse-Variance Weighted (IVW) Estimator Using GWAS Summary Statistics
+$$
+\widehat{\beta}_{XY}^{(\text{IVW})} = \frac{\sum_{i=1}^L \widehat{\beta}_{GX}^{(i)} \widehat{\beta}_{GY}^{(i)} / \sigma_{GY}^{(i)2}}{\sum_{i=1}^L \widehat{\beta}_{GX}^{(i)2} / \sigma_{GY}^{(i)2}}
+$$
 
+where $L$ is the number of genetic variants used as IVs. The variance of the IVW estimator can be estimated as follows:
+$$
+\text{Var}(\widehat{\beta}_{XY}^{(\text{IVW})}) = \frac{1}{\sum_{i=1}^L \widehat{\beta}_{GX}^{(i)2} / \sigma_{GY}^{(i)2}}
+$$
+
+Let $z = \widehat{\beta}_{XY}^{(\text{IVW})} / \sqrt{\text{Var}(\widehat{\beta}_{XY}^{(\text{IVW})})}$ be the test statistic for testing the null hypothesis that $X$ has no causal effect on $Y$ (i.e., $\beta_{XY} = 0$). Under the null hypothesis, $z^2$ follows a chi-squared distribution with 1 degree of freedom, which can be used to obtain a p-value for the test.
 
 
 
 
 !!! note "References"
+
+Burgess, S., Butterworth, A. and Thompson, S.G., 2013. Mendelian randomization analysis with multiple genetic variants using summarized data. Genetic epidemiology, 37(7), pp.658-665.
+
 Davey Smith, G. and Hemani, G., 2014. Mendelian randomization: genetic anchors for causal inference in epidemiological studies. Human molecular genetics, 23(R1), pp.R89-R98.
 
 Lawlor, D.A., Harbord, R.M., Sterne, J.A., Timpson, N. and Davey Smith, G., 2008. Mendelian randomization: using genes as instruments for making causal inferences in epidemiology. Statistics in medicine, 27(8), pp.1133-1163.

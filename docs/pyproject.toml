@@ -9,6 +9,7 @@ python = "^3.10"
 mkdocs = "^1.6.0"
 pymdown-extensions = "^10.9"
 mkdocs-material = "^9.7.0"
+mkdocs-kroki-plugin = "^1.2.0"
 
 [tool.poetry.group.non_docs.dependencies]
 poetry-plugin-export = "^1.8.0"

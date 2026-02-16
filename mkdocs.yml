@@ -8,11 +8,16 @@ theme:
 
 nav:
   - Home: index.md
+  - Python projects:
+      - Linear regression: python_projects/linear_regression.md
+      - Mendelian randomisation: python_projects/mendelian_randomisation.md
   - Rust projects:
       - Introduction: rust_projects/introduction.md
       - Linear regression: rust_projects/linear_regression.md
-  - Python projects:
-      - Linear regression: python_projects/linear_regression.md
+
+plugins:
+  - search
+  - kroki
 
 markdown_extensions:
   - attr_list
@@ -29,6 +34,11 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed: # for enabling tabbed contents
       alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 extra_javascript: # for rendering LaTeX math
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

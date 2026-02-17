@@ -90,8 +90,10 @@ The confounder U is not a problem in this case because G is independent of U (du
 For simplicity, assume that both $X$ and $Y$ are quantitative traits and can be modelled using standard linear models:
 
 $$
-X = \alpha + \beta_{GX} G + \epsilon_X \\
-Y = \gamma^* + \beta_{XY} X + \epsilon_Y^*
+\begin{aligned}
+X &= \alpha + \beta_{GX} G + \epsilon_X \\
+Y &= \gamma^* + \beta_{XY} X + \epsilon_Y^*
+\end{aligned}
 $$
 
 where $\alpha$ and $\gamma^*$ are intercepts, $\beta_{GX}$ is the effect of the genetic variant on the exposure, $\beta_{XY}$ is the causal effect of the exposure on the outcome, and $\epsilon_X$ and $\epsilon_Y^*$ are error terms, where $E(\epsilon_X) = E(\epsilon_Y^*) = 0$.

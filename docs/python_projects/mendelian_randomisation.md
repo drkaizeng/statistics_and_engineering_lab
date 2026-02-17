@@ -88,10 +88,12 @@ digraph MR {
 The confounder U is not a problem in this case because G is independent of U (due to the random assortment of alleles during reproduction). This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 
 
 For simplicity, assume that both $X$ and $Y$ are quantitative traits and can be modelled using standard linear models:
+
 $$
 X = \alpha + \beta_{GX} G + \epsilon_X \\
 Y = \gamma^* + \beta_{XY} X + \epsilon_Y^*
 $$
+
 where $\alpha$ and $\gamma^*$ are intercepts, $\beta_{GX}$ is the effect of the genetic variant on the exposure, $\beta_{XY}$ is the causal effect of the exposure on the outcome, and $\epsilon_X$ and $\epsilon_Y^*$ are error terms, where $E(\epsilon_X) = E(\epsilon_Y^*) = 0$.
 
 Because $G$ has no direct effect on $Y$ (i.e., it only affects $Y$ through $X$), we can derive the following relationship:

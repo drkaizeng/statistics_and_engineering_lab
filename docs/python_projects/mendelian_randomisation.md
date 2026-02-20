@@ -154,13 +154,13 @@ Let $z = \widehat{\beta}_{XY}^{(\text{IVW})} / \sqrt{\text{Var}(\widehat{\beta}_
 
 
 ## Simulation
-In this section, we will set up a simulation framework to generate synthetic data for validating the IVW method. First, consider the exposure $X$. Without loss of generality, we assume that $E(X) = 0$ and $\text{Var}(X) = 1$. For simplicity, we assume that $X$ is influenced by mutations at $L_X$ independent loci, where each locus has two alleles (0 and 1). Let $G_X^{(i)}$ be the genotype at the $i$-th locus, which can take values of 0, 1, or 2, representing the number of copies of allele 1. We can model $X$ as follows:
+In this section, we will set up a simulation framework to generate synthetic data for validating the IVW method. First, consider the exposure $X$. Without loss of generality, we assume $\text{Var}(X) = 1$. For simplicity, we assume that $X$ is influenced by mutations at $L_X$ independent loci, where each locus has two alleles (0 and 1). Let $G_X^{(i)}$ be the genotype at the $i$-th locus, which can take values of 0, 1, or 2, representing the number of copies of allele 1. We can model $X$ as follows:
 
 $$
 X = \sum_{i=1}^{L_X} \beta_{GX}^{(i)} G_X^{(i)} + \epsilon_X
 $$
 
-where $\beta_{GX}^{(i)}$ is the effect of the genotype at the $i$-th locus on the exposure, and $\epsilon_X$ is an error term with mean zero and variance $\sigma_X^2$. The variance of $X$ can be expressed as follows:
+where $\beta_{GX}^{(i)}$ is the effect of the genotype at the $i$-th locus on the exposure, and $\epsilon_X$ is an error term that follows a normal distribution with mean zero and variance $\sigma_X^2$. The variance of $X$ can be expressed as follows:
 
 $$
 \text{Var}(X) = \sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)}) + \sigma_X^2
@@ -187,39 +187,48 @@ E[\text{Var}(X)] &= E\left[\sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i
 \end{aligned}
 $$
 
-For the outcome $Y$, we similarly assume that $E(Y) = 0$ and $\text{Var}(Y) = 1$. The variance of $Y$ can be expressed as follows:
+For the outcome $Y$, we similarly assume $\text{Var}(Y) = 1$. The variance of $Y$ can be expressed as follows:
 
 $$
 \text{Var}(Y) = \beta_{XY}^2 \text{Var}(X) + \sigma_Y^2
 $$
 
-where $\sigma_Y^2 = \text{Var}(\epsilon_Y)$ is the variance of the error term in the model for $Y$. Because $\text{Var}(X) = 1$, the proportion of variance in $Y$ explained by $X$ is $\beta_{XY}^2$.
+where $\sigma_Y^2 = \text{Var}(\epsilon_Y)$ is the variance of the normally-distributed error term in the model for $Y$. Because $\text{Var}(X) = 1$, the proportion of variance in $Y$ explained by $X$ is $\beta_{XY}^2$.
 
 ### Simulation procedure
 
-### Generating population-level parameters
-For each of the $L_X$ loci, sample the allele frequency $p_i$ and the effect size $\beta_{GX}^{(i)}$ from their respective distributions.
+#### Generating population-level parameters
+For each of the $L_X$ loci, sample the allele frequency $p_i$ and the effect size $\beta_{GX}^{(i)}$ from their respective distributions. These parameters are fixed for the entire simulation and represent the true underlying genetic architecture of the exposure $X$.
 
 #### Generating samples for estimating $\beta_{GX}^{(i)}$ 
 1. For each individual in the simulated dataset, repeat the following steps:
+
    1.1 Sample the genotype $G_X^{(i)}$ at each locus from a binomial distribution with parameters $n=2$ and $p=p_i$.
+
    1.2 Sample the error term $\epsilon_X$ from a normal distribution with mean zero and variance $\sigma_X^2$.
+   
    1.3 Calculate the exposure $X$ using the model for $X$.
-2. Perform GWAS to obtain the estimates $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ for a subset containing $L$ of the $L_X$ loci. This is to mimic the fact that real GWAS typically only identify a subset of the loci that influence the exposure.
+
+2. Perform GWAS to obtain $\widehat{\beta}_{GX}^{(i)}$ for a subset containing $L$ of the $L_X$ loci. This is to mimic the fact that real GWAS typically only identify a subset of the loci that influence the exposure.
+
 3. Retain variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$) as IVs for the MR analysis. 
 
 #### Generating samples for estimating $\beta_{GY}^{(i)}$
+
 1. Use the same steps as above to generate the exposure $X$ for each individual in an independent sample.
+
 2. For each individual, sample the error term $\epsilon_Y$ from a normal distribution with mean zero and variance $\sigma_Y^2$.
+
 3. Calculate the outcome $Y$ using the model for $Y$.
-4. Perform GWAS to obtain the estimates $\widehat{\beta}_{GY}^{(i)}$ for the loci chosen as IVs in the previous step.
+
+4. Perform GWAS to obtain $\widehat{\beta}_{GY}^{(i)}$ for the loci chosen as IVs in the previous step.
 
 #### Perform IVW estimation
 Use the estimates $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ obtained from the previous steps to calculate the IVW estimate.
 
 
 ### A concrete example
-Assuming that $X$ has a narrow-sense heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. The simulation procedure can be summarised as follows:
+Assuming that $X$ has a narrow-sense heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. Fifty of the 1000 loci are chosen at random to test for association with $X$, and those that are significantly associated with $X$ are retained as IVs for the MR analysis.
 
 
 

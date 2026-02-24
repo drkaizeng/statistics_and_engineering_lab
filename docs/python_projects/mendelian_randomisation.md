@@ -18,13 +18,13 @@ These are also referred to as modifiable exposures or risk factors. In the conte
 ### Outcomes
 In MR, outcomes are typically health-related traits or diseases that may be influenced by the exposure. For example, if we are studying the causal effect of BMI on cardiovascular disease, cardiovascular disease would be the outcome.
 
+### Instrumental Variables (IV)
+In MR, genetic variants are used as IVs (or instruments). They must be associated with the exposure but not the outcome, other than through their association with the exposure. Statistical instrumental variable analysis was first developed in econometrics in the 1920s, long before the concept of MR was introduced.
+
 ### Comparison with Randomized Controlled Trials (RCTs)
 MR shares some similarities with RCTs in that both methods aim to infer causal relationships between exposures and outcomes. However, unlike RCTs, which involve the random assignment of participants to treatment or control groups, MR relies on the natural random assortment of genetic variants. That is, the chance that an individual inherits a particular genetic variant is random and independent of confounding factors. Thus, if the genetic variant at a locus is associated with the exposure, and if the exposure is causally related to the outcome, then the genetic variant should also be associated with the outcome. As a concrete example, imagine a locus with alleles A and a, where allele A is associated with higher BMI, such that the average BMI of individuals with the AA genotype is higher than those with the Aa genotype, which in turn is higher than those with the aa genotype. If BMI is causally related to cardiovascular disease, then we would expect to see a similar pattern of association between the genotypes and the risk of cardiovascular disease. 
 
 A significant advantage of MR over RCTs is that MR can be conducted using existing observational data, which is often more readily available and less expensive than conducting a new RCT. Additionally, MR can provide insights into the long-term effects of exposures, which may not be feasible in RCTs due to time constraints.
-
-### Instrumental Variables (IV)
-IVs are genetic variants that are associated with the exposure. This name comes from the statistical method of instrumental variable analysis.
 
 ### Mathematical principles of MR
 Let $X$ be the exposure, $Y$ be the outcome. The question of interest is whether $X$ has a causal effect on $Y$. This can be represented using a directed acyclic graph (DAG) as follows:

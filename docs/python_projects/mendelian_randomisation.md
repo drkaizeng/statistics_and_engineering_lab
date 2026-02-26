@@ -204,11 +204,11 @@ For each of the $L_X$ loci, sample the allele frequency $p_i$ and the effect siz
 #### Generating samples for estimating $\beta_{GX}^{(i)}$ 
 1. For each individual in the simulated dataset, repeat the following steps:
 
-   1.1 Sample the genotype $G_X^{(i)}$ at each locus from a binomial distribution with parameters $n=2$ and $p=p_i$.
+    1.1 Sample the genotype $G_X^{(i)}$ at each locus from a binomial distribution with parameters $n=2$ and $p=p_i$.
 
-   1.2 Sample the error term $\epsilon_X$ from a normal distribution with mean zero and variance $\sigma_X^2$.
-   
-   1.3 Calculate the exposure $X$ using the model for $X$.
+    1.2 Sample the error term $\epsilon_X$ from a normal distribution with mean zero and variance $\sigma_X^2$.
+
+    1.3 Calculate the exposure $X$ using the model for $X$.
 
 2. Perform GWAS to obtain $\widehat{\beta}_{GX}^{(i)}$ for a subset containing $L$ of the $L_X$ loci. This is to mimic the fact that real GWAS typically only identify a subset of the loci that influence the exposure.
 
@@ -229,7 +229,7 @@ Use the estimates $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ 
 
 
 ### A concrete example
-Assuming that $X$ has a narrow-sense heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. Fifty of the 1000 loci are chosen at random to test for association with $X$, and those that are significantly associated with $X$ are retained as IVs for the MR analysis.
+Assuming that $X$ has a narrow-sense heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. Fifty of the 1000 loci are chosen at random as IVs for the MR analysis. In real data analysis, causal variants are typically unknown, and the IVs are typically identified as those variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$). We ignore this complication in the simulation for simplicity.
 
 
 

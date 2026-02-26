@@ -19,7 +19,7 @@ These are also referred to as modifiable exposures or risk factors. In the conte
 In MR, outcomes are typically health-related traits or diseases that may be influenced by the exposure. For example, if we are studying the causal effect of BMI on cardiovascular disease, cardiovascular disease would be the outcome.
 
 ### Instrumental Variables (IV)
-In MR, genetic variants are used as IVs (or instruments). They must be associated with the exposure but not the outcome, other than through their association with the exposure. Statistical instrumental variable analysis was first developed in econometrics in the 1920s, long before the concept of MR was introduced.
+In MR, genetic variants are used as IVs (or instruments). They must be associated with the exposure but not the outcome, other than through their association with the exposure. Statistical methods using instrumental variables to estimate causal effects were first developed in econometrics in the 1920s, long before the concept of MR was introduced.
 
 ### Comparison with Randomized Controlled Trials (RCTs)
 MR shares some similarities with RCTs in that both methods aim to infer causal relationships between exposures and outcomes. However, unlike RCTs, which involve the random assignment of participants to treatment or control groups, MR relies on the natural random assortment of genetic variants. That is, the chance that an individual inherits a particular genetic variant is random and independent of confounding factors. Thus, if the genetic variant at a locus is associated with the exposure, and if the exposure is causally related to the outcome, then the genetic variant should also be associated with the outcome. As a concrete example, imagine a locus with alleles A and a, where allele A is associated with higher BMI, such that the average BMI of individuals with the AA genotype is higher than those with the Aa genotype, which in turn is higher than those with the aa genotype. If BMI is causally related to cardiovascular disease, then we would expect to see a similar pattern of association between the genotypes and the risk of cardiovascular disease. 
@@ -64,7 +64,7 @@ digraph MR {
 }
 ```
 
-The key idea of MR is to use genetic variants (G) as IVs. If G is associated with X, but has no direct effect on Y. Then, if we observe an association between G and Y, we can infer that X has a causal effect on Y. This can be represented in a DAG as follows:
+The key idea of MR is to use genetic variants ($G$) as IVs. If $G$ is associated with $X$, but has no direct effect on $Y$. Then, if we observe an association between $G$ and $Y$, we can infer that $X$ has a causal effect on $Y$. This can be represented in a DAG as follows:
 
 ```kroki-graphviz
 digraph MR {
@@ -86,7 +86,7 @@ digraph MR {
 }
 ```
 
-The confounder U is not a problem in this case because G is independent of U (due to the random assortment of alleles during reproduction). This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 
+The confounder $U$ is not a problem in this case because $G$ is independent of $U$ (due to the random assortment of alleles during reproduction). This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 
 
 For simplicity, assume that both $X$ and $Y$ are quantitative traits and can be modelled using standard linear models:
 
@@ -97,9 +97,7 @@ Y &= \gamma^* + \beta_{XY} X + \epsilon_Y^*
 \end{aligned}
 $$
 
-where $\alpha$ and $\gamma^*$ are intercepts, $\beta_{GX}$ is the effect of the genetic variant on the exposure, $\beta_{XY}$ is the causal effect of the exposure on the outcome, and $\epsilon_X$ and $\epsilon_Y^*$ are error terms, where $E(\epsilon_X) = E(\epsilon_Y^*) = 0$.
-
-Because $G$ has no direct effect on $Y$ (i.e., it only affects $Y$ through $X$), we can derive the following relationship:
+where $\alpha$ and $\gamma^*$ are intercepts, $\beta_{GX}$ is the effect of the genetic variant on the exposure, $\beta_{XY}$ is the causal effect of the exposure on the outcome, and $\epsilon_X$ and $\epsilon_Y^*$ are error terms, where $E(\epsilon_X) = E(\epsilon_Y^*) = 0$. Substituting the equation for $X$ into the equation for $Y$, we can derive the following relationship:
 
 $$
 \begin{aligned}
@@ -120,7 +118,7 @@ $$
 \widehat{\beta}_{XY} = \frac{\widehat{\beta}_{GY}}{\widehat{\beta}_{GX}}
 $$
 
-Genome-wide association studies (GWAS) allow for the quantification of associations between a genetic variant and traits $X$ and $Y$, yielding the estimates $\widehat{\beta}_{GX}$ and $\widehat{\beta}_{GY}$. When data from multiple unlinked genetic variants are available, the above equation suggests that the data points $(\widehat{\beta}_{GX}^{(1)}, \widehat{\beta}_{GY}^{(1)})$, $(\widehat{\beta}_{GX}^{(2)}, \widehat{\beta}_{GY}^{(2)})$, ..., $(\widehat{\beta}_{GX}^{(n)}, \widehat{\beta}_{GY}^{(L)})$ should lie on a line with slope $\widehat{\beta}_{XY}$, where the superscript denotes the index of the genetic variant. This means that, with GWAS summary statistics widely available, we can combine data from multiple variants from multiple GWASs to obtain a more precise estimate of $\widehat{\beta}_{XY}$, so long as these different studies are from comparable populations, such that if we were able to test for association between the genetic variants and the traits of interest across all these studies, the causal effect estimates are the same across the studies (bar differences caused by differences in sample sizes). One common method for combining multiple estimates this is the Inverse-Variance Weighted (IVW) estimator, detailed below.
+Genome-wide association studies (GWAS) allow for the quantification of associations between a genetic variant and traits $X$ and $Y$, yielding the estimates $\widehat{\beta}_{GX}$ and $\widehat{\beta}_{GY}$. When data from multiple unlinked genetic variants are available, the above equation suggests that the data points $(\widehat{\beta}_{GX}^{(1)}, \widehat{\beta}_{GY}^{(1)})$, $(\widehat{\beta}_{GX}^{(2)}, \widehat{\beta}_{GY}^{(2)})$, ..., $(\widehat{\beta}_{GX}^{(L)}, \widehat{\beta}_{GY}^{(L)})$ should lie on a line with slope $\widehat{\beta}_{XY}$, where the superscript denotes the index of the genetic variant. This means that, with GWAS summary statistics widely available, we can combine data from multiple variants from multiple GWASs to obtain a more precise estimate of $\widehat{\beta}_{XY}$, so long as these different studies are from comparable populations, such that if we were able to test for association between the genetic variants and the traits of interest across all these studies, the causal effect estimates are the same across the studies (bar differences caused by differences in sample sizes). One common method for combining multiple estimates this is the Inverse-Variance Weighted (IVW) estimator, detailed below.
 
 #### The Inverse-Variance Weighted (IVW) estimator
 The causal effect estimates obtained from different genetic variants vary in precision due to differences in sample sizes and allele frequencies. The IVW estimator is a method for combining these estimates that gives more weight to those with higher precision (i.e., lower variance). Let $\sigma_{GX}^{(i)}$ and $\sigma_{GY}^{(i)}$ be the standard errors of $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$, respectively. For notational clarity, we will drop the superscript $(i)$ in the following. The variance of the ratio estimator $\widehat{\beta}_{XY} = \widehat{\beta}_{GY} / \widehat{\beta}_{GX}$ can be approximated using the delta method as follows:
@@ -151,6 +149,9 @@ $$
 $$
 
 Let $z = \widehat{\beta}_{XY}^{(\text{IVW})} / \sqrt{\text{Var}(\widehat{\beta}_{XY}^{(\text{IVW})})}$ be the test statistic for testing the null hypothesis that $X$ has no causal effect on $Y$ (i.e., $\beta_{XY} = 0$). Under the null hypothesis, $z^2$ follows a chi-squared distribution with 1 degree of freedom, which can be used to obtain a p-value for the test.
+
+#### Limitations of the IVW estimator
+As is the case for any MR estimators, the validity of the IVW estimator relies on the genetic variants used as IVs satisfying the core assumptions of MR, which are reviewed in detail in, e.g., Sanderson et al. (2022). For the IVW estimator, because it combines estimates from multiple genetic variants, it will be biased even if only one of the genetic variants violates the core assumptions of MR. There are methods for addressing this issue (e.g., Bowden et all., 2016), but they are beyond the scope of this project.
 
 
 ## Simulation
@@ -233,6 +234,8 @@ Assuming that $X$ has a narrow-sense heritability of $h_X^2 = 0.5$ and is influe
 
 
 !!! note "References"
+
+Bowden, J., Davey Smith, G., Haycock, P.C. and Burgess, S., 2016. Consistent estimation in Mendelian randomization with some invalid instruments using a weighted median estimator. Genetic epidemiology, 40(4), pp.304-314.
 
 Burgess, S., Butterworth, A. and Thompson, S.G., 2013. Mendelian randomization analysis with multiple genetic variants using summarized data. Genetic epidemiology, 37(7), pp.658-665.
 

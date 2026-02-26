@@ -4,8 +4,9 @@
 
 
 ## Roadmap
-- [x] **Theory**: Document the statistical foundations of Mendelian Randomization (MR), specifically focusing on estimators that use summary statistics from genome-wide association studies (GWAS).
-- [ ] **Development**: Architect and implement a Python package for Inverse-Variance Weighted (IVW) estimation.
+- [x] **Theory**: Document the statistical foundations of Mendelian Randomization (MR), specifically focusing on the Inverse-Variance Weighted (IVW) estimator that uses summary statistics from genome-wide association studies (GWAS).
+- [ ] **Simulation**: Set up a simulation framework to generate synthetic data for validating the IVW method.
+- [ ] **Development**: Architect and implement a Python package for IVW estimation.
 - [ ] **Automation**: Configure a CI/CD pipeline for automated testing and deployment to PyPI.
 
 ## Theory
@@ -17,13 +18,13 @@ These are also referred to as modifiable exposures or risk factors. In the conte
 ### Outcomes
 In MR, outcomes are typically health-related traits or diseases that may be influenced by the exposure. For example, if we are studying the causal effect of BMI on cardiovascular disease, cardiovascular disease would be the outcome.
 
+### Instrumental Variables (IV)
+In MR, genetic variants are used as IVs (or instruments). They must be associated with the exposure but not the outcome, other than through their association with the exposure. Statistical methods using instrumental variables to estimate causal effects were first developed in econometrics in the 1920s, long before the concept of MR was introduced.
+
 ### Comparison with Randomized Controlled Trials (RCTs)
 MR shares some similarities with RCTs in that both methods aim to infer causal relationships between exposures and outcomes. However, unlike RCTs, which involve the random assignment of participants to treatment or control groups, MR relies on the natural random assortment of genetic variants. That is, the chance that an individual inherits a particular genetic variant is random and independent of confounding factors. Thus, if the genetic variant at a locus is associated with the exposure, and if the exposure is causally related to the outcome, then the genetic variant should also be associated with the outcome. As a concrete example, imagine a locus with alleles A and a, where allele A is associated with higher BMI, such that the average BMI of individuals with the AA genotype is higher than those with the Aa genotype, which in turn is higher than those with the aa genotype. If BMI is causally related to cardiovascular disease, then we would expect to see a similar pattern of association between the genotypes and the risk of cardiovascular disease. 
 
 A significant advantage of MR over RCTs is that MR can be conducted using existing observational data, which is often more readily available and less expensive than conducting a new RCT. Additionally, MR can provide insights into the long-term effects of exposures, which may not be feasible in RCTs due to time constraints.
-
-### Instrumental Variables (IV)
-IVs are genetic variants that are associated with the exposure. This name comes from the statistical method of instrumental variable analysis.
 
 ### Mathematical principles of MR
 Let $X$ be the exposure, $Y$ be the outcome. The question of interest is whether $X$ has a causal effect on $Y$. This can be represented using a directed acyclic graph (DAG) as follows:
@@ -63,7 +64,7 @@ digraph MR {
 }
 ```
 
-The key idea of MR is to use genetic variants (G) as IVs. If G is associated with X, but has no direct effect on Y. Then, if we observe an association between G and Y, we can infer that X has a causal effect on Y. This can be represented in a DAG as follows:
+The key idea of MR is to use genetic variants ($G$) as IVs. If $G$ is associated with $X$, but has no direct effect on $Y$. Then, if we observe an association between $G$ and $Y$, we can infer that $X$ has a causal effect on $Y$. This can be represented in a DAG as follows:
 
 ```kroki-graphviz
 digraph MR {
@@ -85,7 +86,7 @@ digraph MR {
 }
 ```
 
-The confounder U is not a problem in this case because G is independent of U (due to the random assortment of alleles during reproduction). This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 
+The confounder $U$ is not a problem in this case because $G$ is independent of $U$ (due to the random assortment of alleles during reproduction). This is analogous to the randomization process in RCTs, where assignment to treatment or control groups is independent of confounding factors, and the outcome is only influenced by the treatment assignment. 
 
 For simplicity, assume that both $X$ and $Y$ are quantitative traits and can be modelled using standard linear models:
 
@@ -96,9 +97,7 @@ Y &= \gamma^* + \beta_{XY} X + \epsilon_Y^*
 \end{aligned}
 $$
 
-where $\alpha$ and $\gamma^*$ are intercepts, $\beta_{GX}$ is the effect of the genetic variant on the exposure, $\beta_{XY}$ is the causal effect of the exposure on the outcome, and $\epsilon_X$ and $\epsilon_Y^*$ are error terms, where $E(\epsilon_X) = E(\epsilon_Y^*) = 0$.
-
-Because $G$ has no direct effect on $Y$ (i.e., it only affects $Y$ through $X$), we can derive the following relationship:
+where $\alpha$ and $\gamma^*$ are intercepts, $\beta_{GX}$ is the effect of the genetic variant on the exposure, $\beta_{XY}$ is the causal effect of the exposure on the outcome, and $\epsilon_X$ and $\epsilon_Y^*$ are error terms, where $E(\epsilon_X) = E(\epsilon_Y^*) = 0$. Substituting the equation for $X$ into the equation for $Y$, we can derive the following relationship:
 
 $$
 \begin{aligned}
@@ -119,7 +118,7 @@ $$
 \widehat{\beta}_{XY} = \frac{\widehat{\beta}_{GY}}{\widehat{\beta}_{GX}}
 $$
 
-Genome-wide association studies (GWAS) allow for the quantification of associations between a genetic variant and traits $X$ and $Y$, yielding the estimates $\widehat{\beta}_{GX}$ and $\widehat{\beta}_{GY}$. When data from multiple unlinked genetic variants are available, the above equation suggests that the data points $(\widehat{\beta}_{GX}^{(1)}, \widehat{\beta}_{GY}^{(1)})$, $(\widehat{\beta}_{GX}^{(2)}, \widehat{\beta}_{GY}^{(2)})$, ..., $(\widehat{\beta}_{GX}^{(n)}, \widehat{\beta}_{GY}^{(L)})$ should lie on a line with slope $\widehat{\beta}_{XY}$, where the superscript denotes the index of the genetic variant. This means that, with GWAS summary statistics widely available, we can combine data from multiple variants from multiple GWASs to obtain a more precise estimate of $\widehat{\beta}_{XY}$, so long as these different studies are from comparable populations, such that if we were able to test for association between the genetic variants and the traits of interest across all these studies, the causal effect estimates are the same across the studies (bar differences caused by differences in sample sizes). One common method for combining multiple estimates this is the Inverse-Variance Weighted (IVW) estimator, detailed below.
+Genome-wide association studies (GWAS) allow for the quantification of associations between a genetic variant and traits $X$ and $Y$, yielding the estimates $\widehat{\beta}_{GX}$ and $\widehat{\beta}_{GY}$. When data from multiple unlinked genetic variants are available, the above equation suggests that the data points $(\widehat{\beta}_{GX}^{(1)}, \widehat{\beta}_{GY}^{(1)})$, $(\widehat{\beta}_{GX}^{(2)}, \widehat{\beta}_{GY}^{(2)})$, ..., $(\widehat{\beta}_{GX}^{(L)}, \widehat{\beta}_{GY}^{(L)})$ should lie on a line with slope $\widehat{\beta}_{XY}$, where the superscript denotes the index of the genetic variant. This means that, with GWAS summary statistics widely available, we can combine data from multiple variants from multiple GWASs to obtain a more precise estimate of $\widehat{\beta}_{XY}$, so long as these different studies are from comparable populations, such that if we were able to test for association between the genetic variants and the traits of interest across all these studies, the causal effect estimates are the same across the studies (bar differences caused by differences in sample sizes). One common method for combining multiple estimates this is the Inverse-Variance Weighted (IVW) estimator, detailed below.
 
 #### The Inverse-Variance Weighted (IVW) estimator
 The causal effect estimates obtained from different genetic variants vary in precision due to differences in sample sizes and allele frequencies. The IVW estimator is a method for combining these estimates that gives more weight to those with higher precision (i.e., lower variance). Let $\sigma_{GX}^{(i)}$ and $\sigma_{GY}^{(i)}$ be the standard errors of $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$, respectively. For notational clarity, we will drop the superscript $(i)$ in the following. The variance of the ratio estimator $\widehat{\beta}_{XY} = \widehat{\beta}_{GY} / \widehat{\beta}_{GX}$ can be approximated using the delta method as follows:
@@ -151,10 +150,92 @@ $$
 
 Let $z = \widehat{\beta}_{XY}^{(\text{IVW})} / \sqrt{\text{Var}(\widehat{\beta}_{XY}^{(\text{IVW})})}$ be the test statistic for testing the null hypothesis that $X$ has no causal effect on $Y$ (i.e., $\beta_{XY} = 0$). Under the null hypothesis, $z^2$ follows a chi-squared distribution with 1 degree of freedom, which can be used to obtain a p-value for the test.
 
+#### Limitations of the IVW estimator
+As is the case for any MR estimators, the validity of the IVW estimator relies on the genetic variants used as IVs satisfying the core assumptions of MR, which are reviewed in detail in, e.g., Sanderson et al. (2022). For the IVW estimator, because it combines estimates from multiple genetic variants, it will be biased even if only one of the genetic variants violates the core assumptions of MR. There are methods for addressing this issue (e.g., Bowden et all., 2016), but they are beyond the scope of this project.
+
+
+## Simulation
+In this section, we will set up a simulation framework to generate synthetic data for validating the IVW method. First, consider the exposure $X$. Without loss of generality, we assume $\text{Var}(X) = 1$. For simplicity, we assume that $X$ is influenced by mutations at $L_X$ independent loci, where each locus has two alleles (0 and 1). Let $G_X^{(i)}$ be the genotype at the $i$-th locus, which can take values of 0, 1, or 2, representing the number of copies of allele 1. We can model $X$ as follows:
+
+$$
+X = \sum_{i=1}^{L_X} \beta_{GX}^{(i)} G_X^{(i)} + \epsilon_X
+$$
+
+where $\beta_{GX}^{(i)}$ is the effect of the genotype at the $i$-th locus on the exposure, and $\epsilon_X$ is an error term that follows a normal distribution with mean zero and variance $\sigma_X^2$. The variance of $X$ can be expressed as follows:
+
+$$
+\text{Var}(X) = \sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)}) + \sigma_X^2
+$$
+
+Under the assumption of Hardy-Weinberg equilibrium, the variance of $G_X^{(i)}$ can be calculated as $2 p_i (1 - p_i)$, where $p_i$ is the allele frequency of allele 1 at the $i$-th locus. We assume that the mutations are all neutral. Using classical population genetics theory, the allele frequency $p_i$ can be sampled from a distribution that is proportional to $1/p_i$ (i.e., the site frequency spectrum). Because GWAS are more appropriate for studying common variants, we restrict our attention to variants with allele frequencies ranging from 0.01 to 0.99. Thus, the expected variance of $G_X^{(i)}$ can be calculated as follows:
+
+$$
+\begin{aligned}
+E[\text{Var}(G_X^{(i)})] &= \int_{0.01}^{0.99} 2 p_i (1 - p_i) \frac{1/p_i}{\int_{0.01}^{0.99} 1/p_i dp_i} dp_i \\
+&= \frac{2 \int_{0.01}^{0.99} (1 - p_i) dp_i}{\int_{0.01}^{0.99} 1/p_i dp_i} \\
+&= \frac{2 (0.99 - 0.01) - (0.99^2 - 0.01^2)}{\log(0.99) - \log(0.01)} \\
+&\approx 0.2133
+\end{aligned}
+$$
+
+For the effect sizes $\beta_{GX}^{(i)}$, we can assume that they are drawn from a normal distribution with mean zero and variance $\sigma_{GX}^2$. Thus, the expected variance of $X$ can be calculated as follows:
+
+$$
+\begin{aligned}
+E[\text{Var}(X)] &= E\left[\sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)})\right] + \sigma_X^2 \\
+&= L_X \sigma_{GX}^2 E[\text{Var}(G_X^{(i)})] + \sigma_X^2 \\
+&= 0.2133 L_X \sigma_{GX}^2 + \sigma_X^2
+\end{aligned}
+$$
+
+For the outcome $Y$, we similarly assume $\text{Var}(Y) = 1$. The variance of $Y$ can be expressed as follows:
+
+$$
+\text{Var}(Y) = \beta_{XY}^2 \text{Var}(X) + \sigma_Y^2
+$$
+
+where $\sigma_Y^2 = \text{Var}(\epsilon_Y)$ is the variance of the normally-distributed error term in the model for $Y$. Because $\text{Var}(X) = 1$, the proportion of variance in $Y$ explained by $X$ is $\beta_{XY}^2$.
+
+### Simulation procedure
+
+#### Generating population-level parameters
+For each of the $L_X$ loci, sample the allele frequency $p_i$ and the effect size $\beta_{GX}^{(i)}$ from their respective distributions. These parameters are fixed for the entire simulation and represent the true underlying genetic architecture of the exposure $X$.
+
+#### Generating samples for estimating $\beta_{GX}^{(i)}$ 
+1. For each individual in the simulated dataset, repeat the following steps:
+
+    1.1 Sample the genotype $G_X^{(i)}$ at each locus from a binomial distribution with parameters $n=2$ and $p=p_i$.
+
+    1.2 Sample the error term $\epsilon_X$ from a normal distribution with mean zero and variance $\sigma_X^2$.
+
+    1.3 Calculate the exposure $X$ using the model for $X$.
+
+2. Perform GWAS to obtain $\widehat{\beta}_{GX}^{(i)}$ for a subset containing $L$ of the $L_X$ loci. This is to mimic the fact that real GWAS typically only identify a subset of the loci that influence the exposure.
+
+3. Retain variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$) as IVs for the MR analysis. 
+
+#### Generating samples for estimating $\beta_{GY}^{(i)}$
+
+1. Use the same steps as above to generate the exposure $X$ for each individual in an independent sample.
+
+2. For each individual, sample the error term $\epsilon_Y$ from a normal distribution with mean zero and variance $\sigma_Y^2$.
+
+3. Calculate the outcome $Y$ using the model for $Y$.
+
+4. Perform GWAS to obtain $\widehat{\beta}_{GY}^{(i)}$ for the loci chosen as IVs in the previous step.
+
+#### Perform IVW estimation
+Use the estimates $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ obtained from the previous steps to calculate the IVW estimate.
+
+
+### A concrete example
+Assuming that $X$ has a narrow-sense heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. Fifty of the 1000 loci are chosen at random as IVs for the MR analysis. In real data analysis, causal variants are typically unknown, and the IVs are typically identified as those variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$). We ignore this complication in the simulation for simplicity.
 
 
 
 !!! note "References"
+
+Bowden, J., Davey Smith, G., Haycock, P.C. and Burgess, S., 2016. Consistent estimation in Mendelian randomization with some invalid instruments using a weighted median estimator. Genetic epidemiology, 40(4), pp.304-314.
 
 Burgess, S., Butterworth, A. and Thompson, S.G., 2013. Mendelian randomization analysis with multiple genetic variants using summarized data. Genetic epidemiology, 37(7), pp.658-665.
 

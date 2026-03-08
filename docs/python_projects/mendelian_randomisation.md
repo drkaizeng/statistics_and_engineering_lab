@@ -1,4 +1,4 @@
-# Mendelian randomisaton (MR)
+# Mendelian randomisation (MR)
 
 **Project status:** Active
 
@@ -10,16 +10,16 @@
 - [ ] **Automation**: Configure a CI/CD pipeline for automated testing and deployment to PyPI.
 
 ## Theory
-Mendelian Randomization is a method that leverages genetic variants as instrumental variables (IV) to infer causal relationships between exposures and outcomes in observational data. The core principle of MR is based on Mendel's laws of inheritance, which suggest that alleles are randomly assorted during gamete formation, thus mimicking the randomization process in randomised controlled trials (RCTs). There are many reviews on MR, e.g., Lawlor et al. (2008), Davey Smith and Hemani (2014), Sanderson et al. (2022), to name a few. The following notes only cover the bascis to set the stage for implementation.
+Mendelian Randomization is a method that leverages genetic variants as instrumental variables (IV) to infer causal relationships between exposures and outcomes in observational data. The core principle of MR is based on Mendel's laws of inheritance, which suggest that alleles are randomly assorted during gamete formation, thus mimicking the randomization process in randomised controlled trials (RCTs). There are many reviews on MR, e.g., Lawlor et al. (2008), Davey Smith and Hemani (2014), Sanderson et al. (2022), to name a few. The following notes only cover the basics to set the stage for implementation.
 
 ### Exposures
-These are also referred to as modifiable exposures or risk factors. In the context MR, exposures are the variables that we are interested in studying for their potential causal effect on an outcome. It is essential that the exposure of interest is determined by genetic variants that can be used as IV. For example, if we are interested in studying the causal effect of body mass index (BMI) on cardiovascular disease, BMI would be the exposure.
+These are also referred to as modifiable exposures or risk factors. In the context of MR, exposures are the variables that we are interested in studying for their potential causal effect on an outcome. It is essential that the exposure of interest is determined by genetic variants that can be used as IV. For example, if we are interested in studying the causal effect of body mass index (BMI) on cardiovascular disease, BMI would be the exposure.
 
 ### Outcomes
 In MR, outcomes are typically health-related traits or diseases that may be influenced by the exposure. For example, if we are studying the causal effect of BMI on cardiovascular disease, cardiovascular disease would be the outcome.
 
 ### Instrumental Variables (IV)
-In MR, genetic variants are used as IVs (or instruments). They must be associated with the exposure but not the outcome, other than through their association with the exposure. Statistical methods using instrumental variables to estimate causal effects were first developed in econometrics in the 1920s, long before the concept of MR was introduced.
+In MR, genetic variants are used as IVs (or instruments). They must be associated with the exposure, and must not affect the outcome directly — their influence on the outcome should operate only through their effect on the exposure. Statistical methods using instrumental variables to estimate causal effects were first developed in econometrics in the 1920s, long before the concept of MR was introduced.
 
 ### Comparison with Randomized Controlled Trials (RCTs)
 MR shares some similarities with RCTs in that both methods aim to infer causal relationships between exposures and outcomes. However, unlike RCTs, which involve the random assignment of participants to treatment or control groups, MR relies on the natural random assortment of genetic variants. That is, the chance that an individual inherits a particular genetic variant is random and independent of confounding factors. Thus, if the genetic variant at a locus is associated with the exposure, and if the exposure is causally related to the outcome, then the genetic variant should also be associated with the outcome. As a concrete example, imagine a locus with alleles A and a, where allele A is associated with higher BMI, such that the average BMI of individuals with the AA genotype is higher than those with the Aa genotype, which in turn is higher than those with the aa genotype. If BMI is causally related to cardiovascular disease, then we would expect to see a similar pattern of association between the genotypes and the risk of cardiovascular disease. 
@@ -64,7 +64,7 @@ digraph MR {
 }
 ```
 
-The key idea of MR is to use genetic variants ($G$) as IVs. If $G$ is associated with $X$, but has no direct effect on $Y$. Then, if we observe an association between $G$ and $Y$, we can infer that $X$ has a causal effect on $Y$. This can be represented in a DAG as follows:
+The key idea of MR is to use genetic variants ($G$) as IVs. If $G$ is associated with $X$ but has no direct effect on $Y$, then if we observe an association between $G$ and $Y$, we can infer that $X$ has a causal effect on $Y$. This can be represented in a DAG as follows:
 
 ```kroki-graphviz
 digraph MR {
@@ -151,7 +151,7 @@ $$
 Let $z = \widehat{\beta}_{XY}^{(\text{IVW})} / \sqrt{\text{Var}(\widehat{\beta}_{XY}^{(\text{IVW})})}$ be the test statistic for testing the null hypothesis that $X$ has no causal effect on $Y$ (i.e., $\beta_{XY} = 0$). Under the null hypothesis, $z^2$ follows a chi-squared distribution with 1 degree of freedom, which can be used to obtain a p-value for the test.
 
 #### Limitations of the IVW estimator
-As is the case for any MR estimators, the validity of the IVW estimator relies on the genetic variants used as IVs satisfying the core assumptions of MR, which are reviewed in detail in, e.g., Sanderson et al. (2022). For the IVW estimator, because it combines estimates from multiple genetic variants, it will be biased even if only one of the genetic variants violates the core assumptions of MR. There are methods for addressing this issue (e.g., Bowden et all., 2016), but they are beyond the scope of this project.
+As is the case for any MR estimators, the validity of the IVW estimator relies on the genetic variants used as IVs satisfying the core assumptions of MR, which are reviewed in detail in, e.g., Sanderson et al. (2022). For the IVW estimator, because it combines estimates from multiple genetic variants, it will be biased even if only one of the genetic variants violates the core assumptions of MR. There are methods for addressing this issue (e.g., Bowden et al., 2016), but they are beyond the scope of this project.
 
 
 ## Simulation

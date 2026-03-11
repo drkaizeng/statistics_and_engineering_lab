@@ -161,11 +161,19 @@ $$
 X = \sum_{i=1}^{L_X} \beta_{GX}^{(i)} G_X^{(i)} + \epsilon_X
 $$
 
-where $\beta_{GX}^{(i)}$ is the effect of the genotype at the $i$-th locus on the exposure, and $\epsilon_X$ is an error term that follows a normal distribution with mean zero and variance $\sigma_X^2$. The variance of $X$ can be expressed as follows:
+where $\beta_{GX}^{(i)}$ is the effect of the genotype at the $i$-th locus on the exposure, and $\epsilon_X$ is an error term that follows a normal distribution with mean zero and variance $\sigma_X^2$. Assuming that the effect sizes and the genotypes are independent, the variance of $X$ can be expressed as follows:
 
 $$
 \text{Var}(X) = \sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)}) + \sigma_X^2
 $$
+
+The heritability of $X$ is given by 
+
+$$
+h_X^2 = \frac{\sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)})}{\text{Var}(X)} = \sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)})
+$$
+
+where the second equality follows from the assumption that $\text{Var}(X) = 1$.
 
 Under the assumption of Hardy-Weinberg equilibrium, the variance of $G_X^{(i)}$ can be calculated as $2 p_i (1 - p_i)$, where $p_i$ is the allele frequency of allele 1 at the $i$-th locus. We assume that the mutations are all neutral. Using classical population genetics theory, the allele frequency $p_i$ can be sampled from a distribution that is proportional to $1/p_i$ (i.e., the site frequency spectrum). Because GWAS are more appropriate for studying common variants, we restrict our attention to variants with allele frequencies ranging from 0.01 to 0.99. Thus, the expected variance of $G_X^{(i)}$ can be calculated as follows:
 
@@ -196,40 +204,16 @@ $$
 
 where $\sigma_Y^2 = \text{Var}(\epsilon_Y)$ is the variance of the normally-distributed error term in the model for $Y$. Because $\text{Var}(X) = 1$, the proportion of variance in $Y$ explained by $X$ is $\beta_{XY}^2$.
 
+The inputs for the IVW estimator, $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$, can be simulated directly, without simulating the genotypes.These estimators are based on the simple linear regression model $y = \beta x + \epsilon$, where $\epsilon$ is a normally-distributed error term with mean zero and variance $\sigma^2$. Using the standard large sample approximation, we have $\widehat{\beta} \sim N\big[\beta, \sigma^2 / (n \text{Var}(x))\big]$, where $n$ is the sample size (see also notes in my [Rust linear regression project](../rust_projects/linear_regression.md))). For $\widehat{\beta}_{GX}^{(i)}$, we use the following assumptions: (1) $\text{Var}(X) = 1$; (2) $L_X$ is large and the effect sizes $\beta_{GX}^{(i)}$ are small; (3) Hardy-Weinberg equilibrium holds. With these assumptions, $\sigma^2 \approx 1$ and $\widehat{\beta}_{GX}^{(i)} \sim N\big[\beta_{GX}^{(i)}, (2 n p_i (1 - p_i))^{-1}\big]$. For $\widehat{\beta}_{GY}^{(i)}$, we have $\widehat{\beta}_{GY}^{(i)} \sim N\big[\beta_{GY}^{(i)}, (2 n p_i (1 - p_i))^{-1}\big]$, where $\beta_{GY}^{(i)} = \beta_{GX}^{(i)} \beta_{XY}$.
+
 ### Simulation procedure
+The input parameters are $L_X$, $h_X^2$, $\beta_{XY}$, and the sample sizes for estimating $\widehat{\beta}_{GX}^{(i)}$ (denoted as $n_X$) and $\widehat{\beta}_{GY}^{(i)}$ (denoted as $n_Y$). 
 
-#### Generating population-level parameters
-For each of the $L_X$ loci, sample the allele frequency $p_i$ and the effect size $\beta_{GX}^{(i)}$ from their respective distributions. These parameters are fixed for the entire simulation and represent the true underlying genetic architecture of the exposure $X$.
-
-#### Generating samples for estimating $\beta_{GX}^{(i)}$ 
-1. For each individual in the simulated dataset, repeat the following steps:
-
-    1.1 Sample the genotype $G_X^{(i)}$ at each locus from a binomial distribution with parameters $n=2$ and $p=p_i$.
-
-    1.2 Sample the error term $\epsilon_X$ from a normal distribution with mean zero and variance $\sigma_X^2$.
-
-    1.3 Calculate the exposure $X$ using the model for $X$.
-
-2. Perform GWAS to obtain $\widehat{\beta}_{GX}^{(i)}$ for a subset containing $L$ of the $L_X$ loci. This is to mimic the fact that real GWAS typically only identify a subset of the loci that influence the exposure.
-
-3. Retain variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$) as IVs for the MR analysis. 
-
-#### Generating samples for estimating $\beta_{GY}^{(i)}$
-
-1. Use the same steps as above to generate the exposure $X$ for each individual in an independent sample.
-
-2. For each individual, sample the error term $\epsilon_Y$ from a normal distribution with mean zero and variance $\sigma_Y^2$.
-
-3. Calculate the outcome $Y$ using the model for $Y$.
-
-4. Perform GWAS to obtain $\widehat{\beta}_{GY}^{(i)}$ for the loci chosen as IVs in the previous step.
-
-#### Perform IVW estimation
-Use the estimates $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ obtained from the previous steps to calculate the IVW estimate.
-
+- Use $h_X^2$ and $L_X$ to calculate $\sigma_{GX}^2$.
+- For each of the $L_X$ loci, sample the allele frequency $p_i$ and the effect size $\beta_{GX}^{(i)}$ from their respective distributions. This is followed by sampling $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ from their respective distributions.
 
 ### A concrete example
-Assuming that $X$ has a narrow-sense heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. Fifty of the 1000 loci are chosen at random as IVs for the MR analysis. In real data analysis, causal variants are typically unknown, and the IVs are typically identified as those variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$). We ignore this complication in the simulation for simplicity.
+Assuming that $X$ has a heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. Fifty of the 1000 loci are chosen at random as IVs for the MR analysis. In real data analysis, causal variants are typically unknown, and the IVs are typically identified as those variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$). We ignore this complication in the simulation for simplicity.
 
 
 

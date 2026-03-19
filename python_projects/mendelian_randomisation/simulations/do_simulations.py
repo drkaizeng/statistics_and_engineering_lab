@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import msgspec
 import numpy as np
 from numpy.random import default_rng
+from scipy.stats import kstest
 
 from mendelian_randomisation.estimate import ivw_estimate
 from mendelian_randomisation.simulate import run_simulation
@@ -157,6 +158,8 @@ def _plot_p_value_histogram(path: Path, p_values: np.ndarray) -> None:
     p_values : numpy.ndarray
         P-values from IVW estimates.
     """
+    ks_result = kstest(p_values, "uniform")
+
     fig, ax = plt.subplots()
     ax.hist(p_values, bins="auto", edgecolor="black")
     mean = np.mean(p_values)
@@ -165,7 +168,7 @@ def _plot_p_value_histogram(path: Path, p_values: np.ndarray) -> None:
     ax.axvline(mean, color="blue", linestyle="-", label=f"Mean = {mean:.4f} (SE = {se:.4f})")
     ax.set_xlabel("P-value")
     ax.set_ylabel("Count")
-    ax.set_title("Distribution of IVW p-values")
+    ax.set_title(f"Distribution of IVW p-values (KS test vs Uniform: p = {ks_result.pvalue:.4g})")
     ax.legend()
     fig.savefig(path, dpi=150, bbox_inches="tight")
     plt.close(fig)

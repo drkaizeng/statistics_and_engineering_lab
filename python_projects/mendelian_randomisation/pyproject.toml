@@ -25,6 +25,7 @@ Homepage = "https://statistics-and-engineering-lab.readthedocs.io/en/latest/pyth
 
 [dependency-groups]
 dev = ["pytest>=9.0.2", "pytest-cov>=7.0.0", "ruff>=0.14.10", "ty>=0.0.5"]
+simulations = ["matplotlib>=3.10.0", "msgspec>=0.19.0"]
 
 [tool.ruff]
 line-length = 120

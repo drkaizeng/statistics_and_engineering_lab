@@ -11,9 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args": [
-                "--input-tsv=/Users/kai.zeng/tmp/test_input.tsv",
-                "--output-tsv=/Users/kai.zeng/tmp/test_output.tsv",
-                "--overwrite"
+                "/Users/kai.zeng/Data/python_projects/statistics_and_engineering_lab/python_projects/mendelian_randomisation/simulations/config.json"
             ]
         },
         {

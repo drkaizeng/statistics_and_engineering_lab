@@ -26,6 +26,6 @@
 		}
 	],
 	"settings": {
-		"workbench.editor.labelFormat": "medium",
+		"workbench.editor.labelFormat": "default",
 	}
 }

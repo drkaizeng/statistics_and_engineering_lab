@@ -219,8 +219,33 @@ The input parameters are $L_X$, $h_X^2$, $\beta_{XY}$, $n_X$, $n_Y$, and $L_{\te
 - The output is a TSV file with columns `effect_allele_frequency`, `true_beta_gx`, `true_beta_gy`, `beta_gx`, `beta_gy`, `standard_error_beta_gx`, `standard_error_beta_gy`, `p_value_beta_gx`, `p_value_beta_gy`.  
 
 
-### A concrete example
-Assuming that $X$ has a heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. Fifty of the 1000 loci are chosen at random as IVs for the MR analysis. In real data analysis, causal variants are typically unknown, and the IVs are typically identified as those variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$). We ignore this complication in the simulation for simplicity.
+### Example 1: Null hypothesis (no causal effect)
+This example tests the behaviour of the IVW estimator when the exposure has no causal effect on the outcome ($\beta_{XY} = 0$), corresponding to `simulations/config_null.json`. The simulation parameters are:
+
+- $h_X^2 = 0.5$, $L_X = 5000$, giving $\sigma_{GX}^2 = 0.5 / (0.2133 \times 5000) \approx 4.688 \times 10^{-4}$
+- $\beta_{XY} = 0$ (0% of the variance in $Y$ is explained by $X$)
+- $n_X = 50000$, $n_Y = 5000$
+- $L_{\text{IV}} = 100$ loci chosen at random (no $p$-value filtering)
+
+Under the null hypothesis, the IVW beta estimates should be centred around zero, and the distribution of p-values should be approximately uniform on $[0, 1]$. The Kolmogorov-Smirnov test can be used to check whether the p-values deviate significantly from uniformity.
+
+![Beta histogram (null)](../../python_projects/mendelian_randomisation/simulations/beta_histogram_null.png)
+
+![P-value histogram (null)](../../python_projects/mendelian_randomisation/simulations/p_value_histogram_null.png)
+
+### Example 2: Causal effect present
+This example tests whether the IVW estimator can recover a true causal effect, corresponding to `simulations/config.json`. The simulation parameters are:
+
+- $h_X^2 = 0.5$, $L_X = 5000$, giving $\sigma_{GX}^2 = 0.5 / (0.2133 \times 5000) \approx 4.688 \times 10^{-4}$
+- 5% of the variance in $Y$ is explained by $X$, so $\beta_{XY} = \sqrt{0.05} \approx 0.2236$
+- $n_X = 50000$, $n_Y = 5000$
+- $L_{\text{IV}} = 100$ loci chosen at random (no $p$-value filtering)
+
+The IVW beta estimates should be centred around the true $\beta_{XY} \approx 0.2236$, and the p-values should be concentrated near zero (rejecting the null hypothesis of no causal effect). In contrast to Example 1, the Kolmogorov-Smirnov test should reject uniformity of the p-values.
+
+![Beta histogram (causal)](../../python_projects/mendelian_randomisation/simulations/beta_histogram.png)
+
+![P-value histogram (causal)](../../python_projects/mendelian_randomisation/simulations/p_value_histogram.png)
 
 
 

@@ -248,6 +248,81 @@ The IVW beta estimates should be centred around the true $\beta_{XY} \approx 0.2
 ![P-value histogram (causal)](mendelian_randomisation_assets/p_value_histogram.png)
 
 
+## Installation
+=== "python -m venv"
+
+    ```bash
+    python -m venv my-venv
+    source my-venv/bin/activate
+    pip install drkaizeng-mendelian-randomisation
+    ```
+
+=== "uv venv"
+
+    ```bash
+    uv venv my-venv
+    source my-venv/bin/activate
+    uv pip install drkaizeng-mendelian-randomisation
+    ```
+
+## Usage
+### As a CLI tool
+Assume that an environment with the package installed has been activated.
+
+#### Simulate GWAS summary statistics
+```bash
+simulate --help
+```
+
+```bash
+simulate \
+    --exposure-heritability 0.5 \
+    --exposure-num-causal-variants 5000 \
+    --num-instrumental-variables 100 \
+    --exposure-sample-size 50000 \
+    --outcome-sample-size 5000 \
+    --percent-outcome-variance-explained-by-exposure 5 \
+    --seed 42 \
+    --output-tsv simulated.tsv
+```
+
+#### Estimate causal effect using IVW
+```bash
+estimate --help
+```
+
+```bash
+estimate --input-tsv simulated.tsv --output-tsv results.tsv
+```
+
+### As an importable library
+```python
+from numpy.random import default_rng
+
+from mendelian_randomisation.estimate import ivw_estimate
+from mendelian_randomisation.simulate import run_simulation
+
+rng = default_rng(42)
+sim_result = run_simulation(
+    exposure_heritability=0.5,
+    exposure_num_causal_variants=5000,
+    num_instrumental_variables=100,
+    exposure_sample_size=50000,
+    outcome_sample_size=5000,
+    percent_outcome_variance_explained_by_exposure=5,
+    rng=rng,
+)
+
+result = ivw_estimate(
+    sim_result["beta_gx"],
+    sim_result["beta_gy"],
+    sim_result["standard_error_beta_gy"],
+)
+print(f"IVW beta: {result.beta:.4f} (SE: {result.standard_error:.4f})")
+```
+
+Note that `simulate` and `estimate` are functions decorated with `@click.command()`, which turns them into `click.core.Command` objects. To call the underlying function directly, use the `.callback` attribute.
+
 
 !!! note "References"
 

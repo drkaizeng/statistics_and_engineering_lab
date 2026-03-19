@@ -52,13 +52,13 @@ Parameters passed directly to `run_simulation()`.
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
 | `num_repetitions` | int | Yes | — | Number of simulation repetitions |
-| `seed` | int | No | None | Random seed for reproducibility |
-| `output_tsv` | string | Yes | — | Path to output TSV file |
 | `beta_histogram_png` | string | Yes | — | Path to beta estimate histogram PNG |
 | `p_value_histogram_png` | string | Yes | — | Path to p-value histogram PNG |
+| `output_tsv` | string | No | None | Path to output TSV file. Omit to skip TSV output |
+| `seed` | int | No | None | Random seed for reproducibility |
 
 ## Output
 
-- **TSV**: One row per repetition with columns `num_instruments`, `beta`, `standard_error`, `minus_log10_p_value`.
+- **TSV** (optional): One row per repetition with columns `num_instruments`, `beta`, `standard_error`, `minus_log10_p_value`.
 - **Beta histogram**: Distribution of IVW beta estimates with a vertical line at the true causal effect.
 - **P-value histogram**: Distribution of p-values with a vertical line at p = 0.05.

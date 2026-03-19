@@ -34,9 +34,9 @@ class SimulationConfig(msgspec.Struct):
 
     run_simulation: RunSimulationConfig
     num_repetitions: int
-    output_tsv: str
     beta_histogram_png: str
     p_value_histogram_png: str
+    output_tsv: str | None = None
     seed: int | None = None
 
 
@@ -53,14 +53,48 @@ def main(config_path: str) -> None:
         config = msgspec.json.decode(f.read(), type=SimulationConfig)
 
     sim_params = msgspec.structs.asdict(config.run_simulation)
-    num_repetitions = config.num_repetitions
-    output_tsv = Path(config.output_tsv)
-    beta_histogram_png = Path(config.beta_histogram_png)
-    p_value_histogram_png = Path(config.p_value_histogram_png)
-
     rng = default_rng(config.seed)
     true_beta_xy = sqrt(config.run_simulation.percent_outcome_variance_explained_by_exposure / 100.0)
 
+    betas, standard_errors, minus_log10_p_values, num_instruments_arr = _run_repetitions(
+        sim_params, config.num_repetitions, rng
+    )
+
+    if config.output_tsv is not None:
+        output_tsv = Path(config.output_tsv)
+        _write_tsv(output_tsv, num_instruments_arr, betas, standard_errors, minus_log10_p_values)
+        logger.info(f"Wrote {config.num_repetitions} results to {output_tsv}")
+
+    _plot_beta_histogram(Path(config.beta_histogram_png), betas, true_beta_xy)
+    logger.info(f"Wrote beta histogram to {config.beta_histogram_png}")
+
+    p_values = 10.0 ** (-minus_log10_p_values)
+    _plot_p_value_histogram(Path(config.p_value_histogram_png), p_values)
+    logger.info(f"Wrote p-value histogram to {config.p_value_histogram_png}")
+
+
+def _run_repetitions(
+    sim_params: dict,  # type: ignore[type-arg]
+    num_repetitions: int,
+    rng: np.random.Generator,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Run repeated simulations and collect IVW estimates.
+
+    Parameters
+    ----------
+    sim_params : dict
+        Keyword arguments for run_simulation().
+    num_repetitions : int
+        Number of repetitions.
+    rng : numpy.random.Generator
+        Random number generator.
+
+    Returns
+    -------
+    tuple of numpy.ndarray
+        (betas, standard_errors, minus_log10_p_values, num_instruments).
+    """
     betas = np.empty(num_repetitions)
     standard_errors = np.empty(num_repetitions)
     minus_log10_p_values = np.empty(num_repetitions)
@@ -68,27 +102,17 @@ def main(config_path: str) -> None:
 
     for i in range(num_repetitions):
         sim_result = run_simulation(**sim_params, rng=rng)
-
         result = ivw_estimate(
             sim_result["beta_gx"],
             sim_result["beta_gy"],
             sim_result["standard_error_beta_gy"],
         )
-
         betas[i] = result.beta
         standard_errors[i] = result.standard_error
         minus_log10_p_values[i] = result.minus_log10_p_value
         num_instruments_arr[i] = result.num_instruments
 
-    _write_tsv(output_tsv, num_instruments_arr, betas, standard_errors, minus_log10_p_values)
-    logger.info(f"Wrote {num_repetitions} results to {output_tsv}")
-
-    _plot_beta_histogram(beta_histogram_png, betas, true_beta_xy)
-    logger.info(f"Wrote beta histogram to {beta_histogram_png}")
-
-    p_values = 10.0 ** (-minus_log10_p_values)
-    _plot_p_value_histogram(p_value_histogram_png, p_values)
-    logger.info(f"Wrote p-value histogram to {p_value_histogram_png}")
+    return betas, standard_errors, minus_log10_p_values, num_instruments_arr
 
 
 def _write_tsv(

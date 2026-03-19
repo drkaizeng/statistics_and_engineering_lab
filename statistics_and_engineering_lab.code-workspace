@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"name": "DOCS",
+			"path": "./docs"
+		},
+		{
+			"name": "LINEAR_REGRESSION (PYTHON)",
+			"path": "./python_projects/linear_regression"
+		},
+		{
+			"name": "MENDELIAN_RANDOMISATION (PYTHON)",
+			"path": "./python_projects/mendelian_randomisation"
+		},
+		{
+			"name": "LINEAR_REGRESSION (RUST)",
+			"path": "./rust_projects/linear_regression"
+		},
+		{
+			"name": "LINEAR_REGRESSION_PYTHON_BINDINGS (RUST)",
+			"path": "./rust_projects/linear_regression_python_bindings"
+		},
+		{
+			"name": "PROJECT ROOT",
+			"path": "./"
+		}
+	],
+	"settings": {
+		"workbench.editor.labelFormat": "medium",
+	}
+}

@@ -229,9 +229,9 @@ This example tests the behaviour of the IVW estimator when the exposure has no c
 
 Under the null hypothesis, the IVW beta estimates should be centred around zero, and the distribution of p-values should be approximately uniform on $[0, 1]$. The Kolmogorov-Smirnov test can be used to check whether the p-values deviate significantly from uniformity.
 
-![Beta histogram (null)](../../python_projects/mendelian_randomisation/simulations/beta_histogram_null.png)
+![Beta histogram (null)](mendelian_randomisation_assets/beta_histogram_null.png)
 
-![P-value histogram (null)](../../python_projects/mendelian_randomisation/simulations/p_value_histogram_null.png)
+![P-value histogram (null)](mendelian_randomisation_assets/p_value_histogram_null.png)
 
 ### Example 2: Causal effect present
 This example tests whether the IVW estimator can recover a true causal effect, corresponding to `simulations/config.json`. The simulation parameters are:
@@ -243,9 +243,9 @@ This example tests whether the IVW estimator can recover a true causal effect, c
 
 The IVW beta estimates should be centred around the true $\beta_{XY} \approx 0.2236$, and the p-values should be concentrated near zero (rejecting the null hypothesis of no causal effect). In contrast to Example 1, the Kolmogorov-Smirnov test should reject uniformity of the p-values.
 
-![Beta histogram (causal)](../../python_projects/mendelian_randomisation/simulations/beta_histogram.png)
+![Beta histogram (causal)](mendelian_randomisation_assets/beta_histogram.png)
 
-![P-value histogram (causal)](../../python_projects/mendelian_randomisation/simulations/p_value_histogram.png)
+![P-value histogram (causal)](mendelian_randomisation_assets/p_value_histogram.png)
 
 
 

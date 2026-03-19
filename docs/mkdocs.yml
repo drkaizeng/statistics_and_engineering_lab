@@ -1,4 +1,5 @@
 site_name: Kai's statistics & engineering lab
+docs_dir: .
 
 theme:
   name: material

@@ -5,11 +5,11 @@
     "num_instrumental_variables": 100,
     "exposure_sample_size": 50000,
     "outcome_sample_size": 5000,
-    "percent_outcome_variance_explained_by_exposure": 5,
+    "percent_outcome_variance_explained_by_exposure": 0,
     "minus_log10_p_threshold": 0
   },
   "num_repetitions": 100,
   "seed": 42,
-  "beta_histogram_png": "simulations/beta_histogram.png",
-  "p_value_histogram_png": "simulations/p_value_histogram.png"
+  "beta_histogram_png": "simulations/beta_histogram_null.png",
+  "p_value_histogram_png": "simulations/p_value_histogram_null.png"
 }

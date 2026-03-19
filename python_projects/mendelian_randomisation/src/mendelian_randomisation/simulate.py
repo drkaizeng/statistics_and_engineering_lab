@@ -51,7 +51,7 @@ def run_simulation(
     af_lower: float = 0.01,
     af_upper: float = 0.99,
     minus_log10_p_threshold: float = 0.0,
-    seed: int | None = None,
+    rng: Generator | None = None,
 ) -> SimulationResult:
     """
     Simulate GWAS summary statistics for Mendelian Randomisation.
@@ -77,8 +77,8 @@ def run_simulation(
     minus_log10_p_threshold : float, optional
         Negative log10 of the p-value threshold for IV selection. 0 means no
         filtering (p_threshold = 1). The default is 0.0.
-    seed : int or None, optional
-        Random seed for reproducibility. The default is None.
+    rng : numpy.random.Generator or None, optional
+        Random number generator. If None, a new default generator is created.
 
     Returns
     -------
@@ -105,7 +105,8 @@ def run_simulation(
         minus_log10_p_threshold,
     )
 
-    rng = default_rng(seed)
+    if rng is None:
+        rng = default_rng()
     e_var_g = expected_genotype_variance(af_lower, af_upper)
     sigma2_gx = exposure_heritability / (exposure_num_causal_variants * e_var_g)
     beta_xy = sqrt(percent_outcome_variance_explained_by_exposure / 100.0)
@@ -365,6 +366,7 @@ def simulate(
     seed: int | None,
 ) -> None:
     """Simulate GWAS summary statistics for Mendelian Randomisation."""
+    rng = default_rng(seed)
     result = run_simulation(
         exposure_heritability=exposure_heritability,
         exposure_num_causal_variants=exposure_num_causal_variants,
@@ -375,7 +377,7 @@ def simulate(
         af_lower=causal_variant_allele_frequency_lower_bound,
         af_upper=causal_variant_allele_frequency_upper_bound,
         minus_log10_p_threshold=minus_log10_p_value_threshold,
-        seed=seed,
+        rng=rng,
     )
 
     _write_tsv(result, output_tsv)

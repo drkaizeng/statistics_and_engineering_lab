@@ -5,6 +5,8 @@ import numpy as np
 import pytest
 from click.testing import CliRunner
 
+from numpy.random import default_rng
+
 from mendelian_randomisation.simulate import (
     expected_genotype_variance,
     run_simulation,
@@ -51,7 +53,7 @@ class TestRunSimulation:
             exposure_sample_size=10000,
             outcome_sample_size=10000,
             percent_outcome_variance_explained_by_exposure=10.0,
-            seed=SEED,
+            rng=default_rng(SEED),
         )
         assert len(result) == 50
 
@@ -63,7 +65,7 @@ class TestRunSimulation:
             exposure_sample_size=10000,
             outcome_sample_size=10000,
             percent_outcome_variance_explained_by_exposure=10.0,
-            seed=SEED,
+            rng=default_rng(SEED),
         )
         expected_columns = [
             "effect_allele_frequency",
@@ -97,7 +99,7 @@ class TestRunSimulation:
             percent_outcome_variance_explained_by_exposure=10.0,
             af_lower=0.05,
             af_upper=0.95,
-            seed=SEED,
+            rng=default_rng(SEED),
         )
         assert np.all(result["effect_allele_frequency"] >= 0.05)
         assert np.all(result["effect_allele_frequency"] <= 0.95)
@@ -111,7 +113,7 @@ class TestRunSimulation:
             outcome_sample_size=100000,
             percent_outcome_variance_explained_by_exposure=10.0,
             minus_log10_p_threshold=5.0,
-            seed=SEED,
+            rng=default_rng(SEED),
         )
         assert len(result) == 20
         assert np.all(result["minus_log10_p_value_beta_gx"] >= 5.0)
@@ -124,7 +126,7 @@ class TestRunSimulation:
             exposure_sample_size=10000,
             outcome_sample_size=10000,
             percent_outcome_variance_explained_by_exposure=10.0,
-            seed=SEED,
+            rng=default_rng(SEED),
         )
         assert np.all(result["minus_log10_p_value_beta_gx"] >= 0.0)
         assert np.all(result["minus_log10_p_value_beta_gy"] >= 0.0)
@@ -137,10 +139,9 @@ class TestRunSimulation:
             "exposure_sample_size": 10000,
             "outcome_sample_size": 5000,
             "percent_outcome_variance_explained_by_exposure": 10.0,
-            "seed": 123,
         }
-        r1 = run_simulation(**kwargs)
-        r2 = run_simulation(**kwargs)
+        r1 = run_simulation(**kwargs, rng=default_rng(123))
+        r2 = run_simulation(**kwargs, rng=default_rng(123))
         np.testing.assert_array_equal(r1["beta_gx"], r2["beta_gx"])
 
     def test_invalid_heritability(self) -> None:

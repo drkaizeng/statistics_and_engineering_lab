@@ -1,6 +1,7 @@
 # Agent instructions
 CLAUDE.md
 agent-instructions.md
+.ruff_cache/
 
 # rust
 /rust_projects/**/target

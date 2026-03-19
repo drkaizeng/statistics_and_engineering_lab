@@ -69,7 +69,7 @@ def run_simulation(
     outcome_sample_size : int
         Sample size for the outcome GWAS (n_Y).
     percent_outcome_variance_explained_by_exposure : float
-        Percentage of outcome variance explained by the exposure, in (0, 100].
+        Percentage of outcome variance explained by the exposure, in [0, 100].
     af_lower : float, optional
         Lower bound of allele frequency range. The default is 0.01.
     af_upper : float, optional
@@ -300,8 +300,8 @@ def _validate_inputs(
         raise ValueError(f"exposure_sample_size must be >= 1, got {exposure_sample_size}")
     if outcome_sample_size < 1:
         raise ValueError(f"outcome_sample_size must be >= 1, got {outcome_sample_size}")
-    if not (0.0 < percent_variance <= 100.0):
-        raise ValueError(f"percent_outcome_variance_explained_by_exposure must be in (0, 100], got {percent_variance}")
+    if not (0.0 <= percent_variance <= 100.0):
+        raise ValueError(f"percent_outcome_variance_explained_by_exposure must be in [0, 100], got {percent_variance}")
     if not (0.0 < af_lower < af_upper < 1.0):
         raise ValueError(f"Require 0 < af_lower < af_upper < 1, got af_lower={af_lower}, af_upper={af_upper}")
     if minus_log10_p < 0.0:

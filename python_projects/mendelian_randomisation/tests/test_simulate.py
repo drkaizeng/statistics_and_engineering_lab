@@ -155,6 +155,18 @@ class TestRunSimulation:
                 percent_outcome_variance_explained_by_exposure=10.0,
             )
 
+    def test_zero_percent_variance(self) -> None:
+        result = run_simulation(
+            exposure_heritability=0.5,
+            exposure_num_causal_variants=100,
+            num_instrumental_variables=10,
+            exposure_sample_size=1000,
+            outcome_sample_size=1000,
+            percent_outcome_variance_explained_by_exposure=0.0,
+            rng=default_rng(SEED),
+        )
+        assert len(result) == 10
+
     def test_invalid_percent_variance(self) -> None:
         with pytest.raises(ValueError, match="percent_outcome"):
             run_simulation(
@@ -163,7 +175,7 @@ class TestRunSimulation:
                 num_instrumental_variables=10,
                 exposure_sample_size=1000,
                 outcome_sample_size=1000,
-                percent_outcome_variance_explained_by_exposure=0.0,
+                percent_outcome_variance_explained_by_exposure=-1.0,
             )
 
 

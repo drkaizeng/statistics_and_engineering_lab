@@ -5,8 +5,8 @@
 
 ## Roadmap
 - [x] **Theory**: Document the statistical foundations of Mendelian Randomization (MR), specifically focusing on the Inverse-Variance Weighted (IVW) estimator that uses summary statistics from genome-wide association studies (GWAS).
-- [ ] **Simulation**: Set up a simulation framework to generate synthetic data for validating the IVW method.
-- [ ] **Development**: Architect and implement a Python package for IVW estimation.
+- [x] **Simulation**: Set up a simulation framework to generate synthetic data for validating the IVW method.
+- [x] **Development**: Architect and implement a Python package for IVW estimation.
 - [ ] **Automation**: Configure a CI/CD pipeline for automated testing and deployment to PyPI.
 
 ## Theory

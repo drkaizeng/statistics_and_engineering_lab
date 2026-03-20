@@ -1,25 +1,25 @@
-# Mendelian randomisaton (MR)
+# Mendelian randomisation (MR)
 
 **Project status:** Active
 
 
 ## Roadmap
 - [x] **Theory**: Document the statistical foundations of Mendelian Randomization (MR), specifically focusing on the Inverse-Variance Weighted (IVW) estimator that uses summary statistics from genome-wide association studies (GWAS).
-- [ ] **Simulation**: Set up a simulation framework to generate synthetic data for validating the IVW method.
-- [ ] **Development**: Architect and implement a Python package for IVW estimation.
+- [x] **Simulation**: Set up a simulation framework to generate synthetic data for validating the IVW method.
+- [x] **Development**: Architect and implement a Python package for IVW estimation.
 - [ ] **Automation**: Configure a CI/CD pipeline for automated testing and deployment to PyPI.
 
 ## Theory
-Mendelian Randomization is a method that leverages genetic variants as instrumental variables (IV) to infer causal relationships between exposures and outcomes in observational data. The core principle of MR is based on Mendel's laws of inheritance, which suggest that alleles are randomly assorted during gamete formation, thus mimicking the randomization process in randomised controlled trials (RCTs). There are many reviews on MR, e.g., Lawlor et al. (2008), Davey Smith and Hemani (2014), Sanderson et al. (2022), to name a few. The following notes only cover the bascis to set the stage for implementation.
+Mendelian Randomization is a method that leverages genetic variants as instrumental variables (IV) to infer causal relationships between exposures and outcomes in observational data. The core principle of MR is based on Mendel's laws of inheritance, which suggest that alleles are randomly assorted during gamete formation, thus mimicking the randomization process in randomised controlled trials (RCTs). There are many reviews on MR, e.g., Lawlor et al. (2008), Davey Smith and Hemani (2014), Sanderson et al. (2022), to name a few. The following notes only cover the basics to set the stage for implementation.
 
 ### Exposures
-These are also referred to as modifiable exposures or risk factors. In the context MR, exposures are the variables that we are interested in studying for their potential causal effect on an outcome. It is essential that the exposure of interest is determined by genetic variants that can be used as IV. For example, if we are interested in studying the causal effect of body mass index (BMI) on cardiovascular disease, BMI would be the exposure.
+These are also referred to as modifiable exposures or risk factors. In the context of MR, exposures are the variables that we are interested in studying for their potential causal effect on an outcome. It is essential that the exposure of interest is determined by genetic variants that can be used as IV. For example, if we are interested in studying the causal effect of body mass index (BMI) on cardiovascular disease, BMI would be the exposure.
 
 ### Outcomes
 In MR, outcomes are typically health-related traits or diseases that may be influenced by the exposure. For example, if we are studying the causal effect of BMI on cardiovascular disease, cardiovascular disease would be the outcome.
 
 ### Instrumental Variables (IV)
-In MR, genetic variants are used as IVs (or instruments). They must be associated with the exposure but not the outcome, other than through their association with the exposure. Statistical methods using instrumental variables to estimate causal effects were first developed in econometrics in the 1920s, long before the concept of MR was introduced.
+In MR, genetic variants are used as IVs (or instruments). They must be associated with the exposure, and must not affect the outcome directly — their influence on the outcome should operate only through their effect on the exposure. Statistical methods using instrumental variables to estimate causal effects were first developed in econometrics in the 1920s, long before the concept of MR was introduced.
 
 ### Comparison with Randomized Controlled Trials (RCTs)
 MR shares some similarities with RCTs in that both methods aim to infer causal relationships between exposures and outcomes. However, unlike RCTs, which involve the random assignment of participants to treatment or control groups, MR relies on the natural random assortment of genetic variants. That is, the chance that an individual inherits a particular genetic variant is random and independent of confounding factors. Thus, if the genetic variant at a locus is associated with the exposure, and if the exposure is causally related to the outcome, then the genetic variant should also be associated with the outcome. As a concrete example, imagine a locus with alleles A and a, where allele A is associated with higher BMI, such that the average BMI of individuals with the AA genotype is higher than those with the Aa genotype, which in turn is higher than those with the aa genotype. If BMI is causally related to cardiovascular disease, then we would expect to see a similar pattern of association between the genotypes and the risk of cardiovascular disease. 
@@ -64,7 +64,7 @@ digraph MR {
 }
 ```
 
-The key idea of MR is to use genetic variants ($G$) as IVs. If $G$ is associated with $X$, but has no direct effect on $Y$. Then, if we observe an association between $G$ and $Y$, we can infer that $X$ has a causal effect on $Y$. This can be represented in a DAG as follows:
+The key idea of MR is to use genetic variants ($G$) as IVs. If $G$ is associated with $X$ but has no direct effect on $Y$, then if we observe an association between $G$ and $Y$, we can infer that $X$ has a causal effect on $Y$. This can be represented in a DAG as follows:
 
 ```kroki-graphviz
 digraph MR {
@@ -151,7 +151,7 @@ $$
 Let $z = \widehat{\beta}_{XY}^{(\text{IVW})} / \sqrt{\text{Var}(\widehat{\beta}_{XY}^{(\text{IVW})})}$ be the test statistic for testing the null hypothesis that $X$ has no causal effect on $Y$ (i.e., $\beta_{XY} = 0$). Under the null hypothesis, $z^2$ follows a chi-squared distribution with 1 degree of freedom, which can be used to obtain a p-value for the test.
 
 #### Limitations of the IVW estimator
-As is the case for any MR estimators, the validity of the IVW estimator relies on the genetic variants used as IVs satisfying the core assumptions of MR, which are reviewed in detail in, e.g., Sanderson et al. (2022). For the IVW estimator, because it combines estimates from multiple genetic variants, it will be biased even if only one of the genetic variants violates the core assumptions of MR. There are methods for addressing this issue (e.g., Bowden et all., 2016), but they are beyond the scope of this project.
+As is the case for any MR estimators, the validity of the IVW estimator relies on the genetic variants used as IVs satisfying the core assumptions of MR, which are reviewed in detail in, e.g., Sanderson et al. (2022). For the IVW estimator, because it combines estimates from multiple genetic variants, it will be biased even if only one of the genetic variants violates the core assumptions of MR. There are methods for addressing this issue (e.g., Bowden et al., 2016), but they are beyond the scope of this project.
 
 
 ## Simulation
@@ -161,11 +161,19 @@ $$
 X = \sum_{i=1}^{L_X} \beta_{GX}^{(i)} G_X^{(i)} + \epsilon_X
 $$
 
-where $\beta_{GX}^{(i)}$ is the effect of the genotype at the $i$-th locus on the exposure, and $\epsilon_X$ is an error term that follows a normal distribution with mean zero and variance $\sigma_X^2$. The variance of $X$ can be expressed as follows:
+where $\beta_{GX}^{(i)}$ is the effect of the genotype at the $i$-th locus on the exposure, and $\epsilon_X$ is an error term that follows a normal distribution with mean zero and variance $\sigma_X^2$. Assuming that the effect sizes and the genotypes are independent, the variance of $X$ can be expressed as follows:
 
 $$
 \text{Var}(X) = \sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)}) + \sigma_X^2
 $$
+
+The heritability of $X$ is given by 
+
+$$
+h_X^2 = \frac{\sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)})}{\text{Var}(X)} = \sum_{i=1}^{L_X} \beta_{GX}^{(i)2} \text{Var}(G_X^{(i)})
+$$
+
+where the second equality follows from the assumption that $\text{Var}(X) = 1$.
 
 Under the assumption of Hardy-Weinberg equilibrium, the variance of $G_X^{(i)}$ can be calculated as $2 p_i (1 - p_i)$, where $p_i$ is the allele frequency of allele 1 at the $i$-th locus. We assume that the mutations are all neutral. Using classical population genetics theory, the allele frequency $p_i$ can be sampled from a distribution that is proportional to $1/p_i$ (i.e., the site frequency spectrum). Because GWAS are more appropriate for studying common variants, we restrict our attention to variants with allele frequencies ranging from 0.01 to 0.99. Thus, the expected variance of $G_X^{(i)}$ can be calculated as follows:
 
@@ -196,41 +204,124 @@ $$
 
 where $\sigma_Y^2 = \text{Var}(\epsilon_Y)$ is the variance of the normally-distributed error term in the model for $Y$. Because $\text{Var}(X) = 1$, the proportion of variance in $Y$ explained by $X$ is $\beta_{XY}^2$.
 
+The inputs for the IVW estimator, $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$, can be simulated directly, without simulating the genotypes. These estimators are based on the simple linear regression model $y = \beta x + \epsilon$, where $\epsilon$ is a normally-distributed error term with mean zero and variance $\sigma^2$. Using the standard large sample approximation, we have $\widehat{\beta} \sim N\big[\beta, \sigma^2 / (n \text{Var}(x))\big]$, where $n$ is the sample size (see also notes in my [Rust linear regression project](../rust_projects/linear_regression.md)). For $\widehat{\beta}_{GX}^{(i)}$, we use the following assumptions: (1) $\text{Var}(X) = 1$; (2) $L_X$ is large and the effect sizes $\beta_{GX}^{(i)}$ are small; (3) Hardy-Weinberg equilibrium holds. With these assumptions, $\sigma^2 \approx 1$ and $\widehat{\beta}_{GX}^{(i)} \sim N\big[\beta_{GX}^{(i)}, (2 n_X p_i (1 - p_i))^{-1}\big]$, where $n_X$ is the sample size. Similarly, since $\text{Var}(Y) = 1$ and the individual effects of genetic variants on $Y$ are small, we have $\widehat{\beta}_{GY}^{(i)} \sim N\big[\beta_{GY}^{(i)}, (2 n_Y p_i (1 - p_i))^{-1}\big]$, where $n_Y$ is the sample size and $\beta_{GY}^{(i)} = \beta_{GX}^{(i)} \beta_{XY}$. For simplicity, the variances of the distributions from which $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ are sampled are treated as the variances of these estimators.
+
 ### Simulation procedure
+The input parameters are $L_X$, $h_X^2$, $\beta_{XY}$, $n_X$, $n_Y$, and $L_{\text{IV}}$ (the number of IVs). Optionally, the user can also specify a $p$-value threshold (denoted as $p_{\text{threshold}}$) for selecting IVs.
 
-#### Generating population-level parameters
-For each of the $L_X$ loci, sample the allele frequency $p_i$ and the effect size $\beta_{GX}^{(i)}$ from their respective distributions. These parameters are fixed for the entire simulation and represent the true underlying genetic architecture of the exposure $X$.
-
-#### Generating samples for estimating $\beta_{GX}^{(i)}$ 
-1. For each individual in the simulated dataset, repeat the following steps:
-
-    1.1 Sample the genotype $G_X^{(i)}$ at each locus from a binomial distribution with parameters $n=2$ and $p=p_i$.
-
-    1.2 Sample the error term $\epsilon_X$ from a normal distribution with mean zero and variance $\sigma_X^2$.
-
-    1.3 Calculate the exposure $X$ using the model for $X$.
-
-2. Perform GWAS to obtain $\widehat{\beta}_{GX}^{(i)}$ for a subset containing $L$ of the $L_X$ loci. This is to mimic the fact that real GWAS typically only identify a subset of the loci that influence the exposure.
-
-3. Retain variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$) as IVs for the MR analysis. 
-
-#### Generating samples for estimating $\beta_{GY}^{(i)}$
-
-1. Use the same steps as above to generate the exposure $X$ for each individual in an independent sample.
-
-2. For each individual, sample the error term $\epsilon_Y$ from a normal distribution with mean zero and variance $\sigma_Y^2$.
-
-3. Calculate the outcome $Y$ using the model for $Y$.
-
-4. Perform GWAS to obtain $\widehat{\beta}_{GY}^{(i)}$ for the loci chosen as IVs in the previous step.
-
-#### Perform IVW estimation
-Use the estimates $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ obtained from the previous steps to calculate the IVW estimate.
+- Use $h_X^2$ and $L_X$ to calculate $\sigma_{GX}^2$.
+- For each of the $L_{\text{IV}}$ loci, 
+    - Sample the allele frequency $p_i$ and the effect size $\beta_{GX}^{(i)}$ from their respective distributions.
+    - Sample $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$ from their respective distributions.
+    - Compute $z_{GX}^{(i)} = \widehat{\beta}_{GX}^{(i)} / \sigma_{GX}^{(i)}$ and $z_{GY}^{(i)} = \widehat{\beta}_{GY}^{(i)} / \sigma_{GY}^{(i)}$, where $\sigma_{GX}^{(i)}$ and $\sigma_{GY}^{(i)}$ are the standard errors of $\widehat{\beta}_{GX}^{(i)}$ and $\widehat{\beta}_{GY}^{(i)}$, respectively.
+    - Compute the $p$-values for testing the null hypotheses of no association (i.e., $\beta_{GX}^{(i)} = 0$ or $\beta_{GY}^{(i)} = 0$, respectively) by using the fact that $z_{GX}^{(i)2}$ and $z_{GY}^{(i)2}$ follow a chi-squared distribution with 1 degree of freedom under the null hypothesis.
+    - If $p_{\text{threshold}}$ is specified, reject the simulated data point if the $p$-value for testing the null hypothesis of $\beta_{GX}^{(i)} = 0$ is greater than $p_{\text{threshold}}$. This mimics the common practice in real data analysis of selecting IVs based on their association with the exposure.
+- The output is a TSV file with columns `effect_allele_frequency`, `true_beta_gx`, `true_beta_gy`, `beta_gx`, `beta_gy`, `standard_error_beta_gx`, `standard_error_beta_gy`, `p_value_beta_gx`, `p_value_beta_gy`.  
 
 
-### A concrete example
-Assuming that $X$ has a narrow-sense heritability of $h_X^2 = 0.5$ and is influenced by $L_X = 1000$ independent loci, we have $\sigma_X^2 = 0.5$ and $\sigma_{GX}^2 = 0.5 / (0.2133 \times 1000) = 0.002344$. We also assume that 10% of the variance in $Y$ is explained by $X$, which means that $\beta_{XY} = \sqrt{0.1} \approx 0.3162$. Fifty of the 1000 loci are chosen at random as IVs for the MR analysis. In real data analysis, causal variants are typically unknown, and the IVs are typically identified as those variants that are significantly associated with the exposure (e.g., those with p-values less than $5 \times 10^{-8}$). We ignore this complication in the simulation for simplicity.
+### Example 1: Null hypothesis (no causal effect)
+This example tests the behaviour of the IVW estimator when the exposure has no causal effect on the outcome ($\beta_{XY} = 0$), corresponding to `simulations/config_null.json`. The simulation parameters are:
 
+- $h_X^2 = 0.5$, $L_X = 5000$, giving $\sigma_{GX}^2 = 0.5 / (0.2133 \times 5000) \approx 4.688 \times 10^{-4}$
+- $\beta_{XY} = 0$ (0% of the variance in $Y$ is explained by $X$)
+- $n_X = 50000$, $n_Y = 5000$
+- $L_{\text{IV}} = 100$ loci chosen at random (no $p$-value filtering)
+
+Under the null hypothesis, the IVW beta estimates should be centred around zero, and the distribution of p-values should be approximately uniform on $[0, 1]$. The Kolmogorov-Smirnov test can be used to check whether the p-values deviate significantly from uniformity.
+
+![Beta histogram (null)](mendelian_randomisation_assets/beta_histogram_null.png)
+
+![P-value histogram (null)](mendelian_randomisation_assets/p_value_histogram_null.png)
+
+### Example 2: Causal effect present
+This example tests whether the IVW estimator can recover a true causal effect, corresponding to `simulations/config.json`. The simulation parameters are:
+
+- $h_X^2 = 0.5$, $L_X = 5000$, giving $\sigma_{GX}^2 = 0.5 / (0.2133 \times 5000) \approx 4.688 \times 10^{-4}$
+- 5% of the variance in $Y$ is explained by $X$, so $\beta_{XY} = \sqrt{0.05} \approx 0.2236$
+- $n_X = 50000$, $n_Y = 5000$
+- $L_{\text{IV}} = 100$ loci chosen at random (no $p$-value filtering)
+
+The IVW beta estimates should be centred around the true $\beta_{XY} \approx 0.2236$, and the p-values should be concentrated near zero (rejecting the null hypothesis of no causal effect). In contrast to Example 1, the Kolmogorov-Smirnov test should reject uniformity of the p-values.
+
+![Beta histogram (causal)](mendelian_randomisation_assets/beta_histogram.png)
+
+![P-value histogram (causal)](mendelian_randomisation_assets/p_value_histogram.png)
+
+
+## Installation
+=== "python -m venv"
+
+    ```bash
+    python -m venv my-venv
+    source my-venv/bin/activate
+    pip install drkaizeng-mendelian-randomisation
+    ```
+
+=== "uv venv"
+
+    ```bash
+    uv venv my-venv
+    source my-venv/bin/activate
+    uv pip install drkaizeng-mendelian-randomisation
+    ```
+
+## Usage
+### As a CLI tool
+Assume that an environment with the package installed has been activated.
+
+#### Simulate GWAS summary statistics
+```bash
+simulate --help
+```
+
+```bash
+simulate \
+    --exposure-heritability 0.5 \
+    --exposure-num-causal-variants 5000 \
+    --num-instrumental-variables 100 \
+    --exposure-sample-size 50000 \
+    --outcome-sample-size 5000 \
+    --percent-outcome-variance-explained-by-exposure 5 \
+    --seed 42 \
+    --output-tsv simulated.tsv
+```
+
+#### Estimate causal effect using IVW
+```bash
+estimate --help
+```
+
+```bash
+estimate --input-tsv simulated.tsv --output-tsv results.tsv
+```
+
+### As an importable library
+```python
+from numpy.random import default_rng
+
+from mendelian_randomisation.estimate import ivw_estimate
+from mendelian_randomisation.simulate import run_simulation
+
+rng = default_rng(42)
+sim_result = run_simulation(
+    exposure_heritability=0.5,
+    exposure_num_causal_variants=5000,
+    num_instrumental_variables=100,
+    exposure_sample_size=50000,
+    outcome_sample_size=5000,
+    percent_outcome_variance_explained_by_exposure=5,
+    rng=rng,
+)
+
+result = ivw_estimate(
+    sim_result["beta_gx"],
+    sim_result["beta_gy"],
+    sim_result["standard_error_beta_gy"],
+)
+print(f"IVW beta: {result.beta:.4f} (SE: {result.standard_error:.4f})")
+```
+
+Note that `simulate` and `estimate` are functions decorated with `@click.command()`, which turns them into `click.core.Command` objects. To call the underlying function directly, use the `.callback` attribute.
 
 
 !!! note "References"

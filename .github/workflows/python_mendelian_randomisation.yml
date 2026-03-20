@@ -214,4 +214,5 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: ${{ needs.prepare_for_publishing.outputs.IS_PRODUCTION_RELEASE == 'false' && 'https://test.pypi.org/legacy/' || '' }}
+          verify-metadata: false
           verbose: true

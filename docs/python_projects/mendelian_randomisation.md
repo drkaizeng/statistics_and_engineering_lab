@@ -1,13 +1,13 @@
 # Mendelian randomisation (MR)
 
-**Project status:** Active
+**Project status:** Complete
 
 
 ## Roadmap
 - [x] **Theory**: Document the statistical foundations of Mendelian Randomization (MR), specifically focusing on the Inverse-Variance Weighted (IVW) estimator that uses summary statistics from genome-wide association studies (GWAS).
 - [x] **Simulation**: Set up a simulation framework to generate synthetic data for validating the IVW method.
 - [x] **Development**: Architect and implement a Python package for IVW estimation.
-- [ ] **Automation**: Configure a CI/CD pipeline for automated testing and deployment to PyPI.
+- [x] **Automation**: Configure a CI/CD pipeline for automated testing and deployment to PyPI.
 
 ## Theory
 Mendelian Randomization is a method that leverages genetic variants as instrumental variables (IV) to infer causal relationships between exposures and outcomes in observational data. The core principle of MR is based on Mendel's laws of inheritance, which suggest that alleles are randomly assorted during gamete formation, thus mimicking the randomization process in randomised controlled trials (RCTs). There are many reviews on MR, e.g., Lawlor et al. (2008), Davey Smith and Hemani (2014), Sanderson et al. (2022), to name a few. The following notes only cover the basics to set the stage for implementation.

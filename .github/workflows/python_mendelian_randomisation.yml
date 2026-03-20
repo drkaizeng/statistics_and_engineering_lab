@@ -150,6 +150,8 @@ jobs:
     name: Publish to repository
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     needs: prepare_for_publishing
+    permissions:
+      id-token: write
     uses: ./.github/workflows/publish_to_pypi.yml
     with:
       is_production_release: ${{ needs.prepare_for_publishing.outputs.IS_PRODUCTION_RELEASE == 'true' }}

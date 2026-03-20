@@ -395,7 +395,7 @@ def _write_tsv(result: SimulationResult, output_path: Path) -> None:
     output_path : Path
         Output file path.
     """
-    columns = list(result.dtype.names)  # type: ignore[arg-type]
+    columns = list(result.dtype.names)  # ty: ignore[invalid-argument-type]
     with open(output_path, "w") as f:
         f.write("\t".join(columns) + "\n")
         for row in result:

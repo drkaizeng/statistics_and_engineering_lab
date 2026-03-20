@@ -74,7 +74,7 @@ def main(config_path: str) -> None:
 
 
 def _run_repetitions(
-    sim_params: dict,  # type: ignore[type-arg]
+    sim_params: dict,
     num_repetitions: int,
     rng: np.random.Generator,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:

@@ -45,7 +45,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install repo
-        run: uv sync --locked --all-extras
+        run: uv sync --locked --all-groups
 
       - name: Linting and format/type checks
         run: |

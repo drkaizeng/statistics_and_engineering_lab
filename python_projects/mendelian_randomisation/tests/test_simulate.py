@@ -78,7 +78,7 @@ class TestRunSimulation:
             "minus_log10_p_value_beta_gx",
             "minus_log10_p_value_beta_gy",
         ]
-        assert list(result.dtype.names) == expected_columns
+        assert list(result.dtype.names) == expected_columns  # ty: ignore[invalid-argument-type]
 
     def test_concrete_example_sigma2_gx(self) -> None:
         e_var = expected_genotype_variance(0.01, 0.99)
@@ -132,16 +132,24 @@ class TestRunSimulation:
         assert np.all(result["minus_log10_p_value_beta_gy"] >= 0.0)
 
     def test_reproducibility_with_seed(self) -> None:
-        kwargs = {
-            "exposure_heritability": 0.5,
-            "exposure_num_causal_variants": 1000,
-            "num_instrumental_variables": 50,
-            "exposure_sample_size": 10000,
-            "outcome_sample_size": 5000,
-            "percent_outcome_variance_explained_by_exposure": 10.0,
-        }
-        r1 = run_simulation(**kwargs, rng=default_rng(123))
-        r2 = run_simulation(**kwargs, rng=default_rng(123))
+        r1 = run_simulation(
+            exposure_heritability=0.5,
+            exposure_num_causal_variants=1000,
+            num_instrumental_variables=50,
+            exposure_sample_size=10000,
+            outcome_sample_size=5000,
+            percent_outcome_variance_explained_by_exposure=10.0,
+            rng=default_rng(123),
+        )
+        r2 = run_simulation(
+            exposure_heritability=0.5,
+            exposure_num_causal_variants=1000,
+            num_instrumental_variables=50,
+            exposure_sample_size=10000,
+            outcome_sample_size=5000,
+            percent_outcome_variance_explained_by_exposure=10.0,
+            rng=default_rng(123),
+        )
         np.testing.assert_array_equal(r1["beta_gx"], r2["beta_gx"])
 
     def test_invalid_heritability(self) -> None:

@@ -71,13 +71,24 @@ pub fn do_linear_regression(data: &[f64]) -> LinearRegressionResult {
     let t_dist =
         StudentsT::new(0.0, 1.0, n - 2.0).expect("Failed to create Student's t-distribution");
     let cutoff = t_dist.inverse_cdf(0.975);
+
+    let p_value = |beta: f64, var_beta: f64| -> f64 {
+        if beta == 0.0 && var_beta == 0.0 {
+            1.0
+        } else if var_beta == 0.0 {
+            0.0
+        } else {
+            2.0 * (1.0 - t_dist.cdf(beta.abs() / var_beta.sqrt()))
+        }
+    };
+
     let beta_1_conf_low = beta_1 - cutoff * var_beta_1.sqrt();
     let beta_1_conf_high = beta_1 + cutoff * var_beta_1.sqrt();
-    let beta_1_p_value = 2.0 * (1.0 - t_dist.cdf(beta_1.abs() / var_beta_1.sqrt()));
+    let beta_1_p_value = p_value(beta_1, var_beta_1);
 
     let beta_0_conf_low = beta_0 - cutoff * var_beta_0.sqrt();
     let beta_0_conf_high = beta_0 + cutoff * var_beta_0.sqrt();
-    let beta_0_p_value = 2.0 * (1.0 - t_dist.cdf(beta_0.abs() / var_beta_0.sqrt()));
+    let beta_0_p_value = p_value(beta_0, var_beta_0);
 
     let ssr = bar_y.iter().map(|&x| (x - mean_y).powi(2)).sum::<f64>();
     let sst = chunks
@@ -119,6 +130,19 @@ mod tests {
         assert_eq!(results.beta_0_conf_low, 1.0);
         assert_eq!(results.beta_0_conf_high, 1.0);
         assert_eq!(results.beta_0_p_value, 0.0);
+        assert_eq!(results.r_squared, 1.0);
+    }
+
+    #[test]
+    fn test_do_linear_regression_collinear_through_origin() {
+        let data = vec![1.0, 2.0, 2.0, 4.0, 3.0, 6.0];
+        let results = do_linear_regression(&data);
+        assert_eq!(results.beta_1, 2.0);
+        assert_eq!(results.beta_0, 0.0);
+        assert_eq!(results.var_beta_1, 0.0);
+        assert_eq!(results.var_beta_0, 0.0);
+        assert_eq!(results.beta_1_p_value, 0.0);
+        assert_eq!(results.beta_0_p_value, 1.0);
         assert_eq!(results.r_squared, 1.0);
     }
 

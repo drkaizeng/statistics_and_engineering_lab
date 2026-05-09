@@ -7,8 +7,12 @@ theme:
     - content.code.copy
     - toc.follow
 
+# Test localling using `mkdocs serve -f mkdocs.yml`
+
 nav:
   - Home: index.md
+  - Statistical genetics:
+      - Linear mixed models: statistical_genetics/linear_mixed_models.md
   - Python projects:
       - Linear regression: python_projects/linear_regression.md
       - Mendelian randomisation: python_projects/mendelian_randomisation.md

@@ -18,7 +18,7 @@ where $\mathbf{G}$ is a standardised version of $\mathbf{G}^*$ with mean 0 and v
 
 In a fixed effect model where $\boldsymbol{\beta}$ in \eqref{eq:lmm} is treated as a fixed effect, which leads to $M$ parameters to be estimated. When $M$ is large, the number of parameters can exceed the number of samples, leading to overfitting. The LMM addresses this issue by assuming that the effects of the $M$ sites share a common distribution thereby reducing the number of parameters from $M$ to 1 (i.e., $\sigma_g^2$).
 
-### Covariance, genetic relationship matrix, and heritability
+### Covariance and genetic relationship matrix
 Let $i$ and $j$ index two individuals, corresponding to rows in the vectors and matrices defined in \eqref{eq:lmm}. Because $\mathbf{X}_i \boldsymbol{\alpha}$ and $\mathbf{X}_j \boldsymbol{\alpha}$ are fixed constants, they do not contribute to the covariance. The covariance between their phenotypes can be expressed as:
 
 $$
@@ -60,9 +60,9 @@ $$
 The first term on the right-hand side corresponds to the case where the two alleles are IBD, in which case they both carry allele 1 with probability $p$. The second term corresponds to the case where the two alleles are not IBD, in which case they both carry allele 1 with probability $p^2$. Substituting this expression into the equation for $\text{Corr}(G^*_i, G^*_j)$ gives:
 
 $$
-\begin{align}
+\begin{align*}
 \text{Corr}(G^*_i, G^*_j) = 2 \phi_{ij} = r_{ij}
-\end{align}
+\end{align*}
 $$
 
 where $r_{ij}$ is the relatedness coefficient. Without inbreeding, $r_{ij}$ can be interpreted as the expected proportion of alleles that are IBD between individuals $i$ and $j$. For example, $r_{ij} = 1$ for monozygotic twins or duplicated samples, $r_{ij} = 0.5$ for first-degree relatives such as parent-offspring pairs and full siblings.
@@ -79,6 +79,9 @@ $$
 where $\hat{p}_k$ is the sample frequency of allele 1 at site $k$, and $G_{ik}$ is the standardised genotype.
 
 It should be noted that the GRM estimator assumes that the samples are drawn from a homogeneous population. If this assumption is violated, the estimator can be biased. Furthermore, the $\hat{p}_k (1 - \hat{p}_k)$ term in the denominator can be small for rare variants, which can lead to large sampling variance in the estimator. It is common practice to exclude rare variants when constructing the GRM for this reason (e.g., rare variants with minor allele frequency less than 5%).
+
+
+
 
 !!! note "References"
 Rencher, A. C., & Schaalje, G. B. (2008). Linear models in statistics. John Wiley & Sons.

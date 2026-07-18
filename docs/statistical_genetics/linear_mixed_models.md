@@ -1,6 +1,6 @@
 # Linear mixed models (LMMs)
 
-**Project status:** Active
+**Project status:** Paused
 
 The following exposition of linear mixed models is based on standard textbooks such as Rencher and Schaalje (2008), and references from the field of statistical genetics such as Matti Pirinen's lecture notes (see [here](https://www.mv.helsinki.fi/home/mjxpirin/GWAS_course/)).
 

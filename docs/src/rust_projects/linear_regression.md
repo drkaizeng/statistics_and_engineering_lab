@@ -67,4 +67,4 @@ docker run -v "${PWD}":/data -w /data --user "$(id -u):$(id -g)" drkaizeng/stats
 
 
 !!! note "References"
-Rencher, A. C., & Schaalje, G. B. (2008). Linear models in statistics. John Wiley & Sons.
+    Rencher, A. C., & Schaalje, G. B. (2008). Linear models in statistics. John Wiley & Sons.

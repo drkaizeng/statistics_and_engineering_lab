@@ -1,5 +1,5 @@
 site_name: Kai's statistics & engineering lab
-docs_dir: .
+docs_dir: src
 
 theme:
   name: material
@@ -7,8 +7,12 @@ theme:
     - content.code.copy
     - toc.follow
 
+# Test localling using `mkdocs serve -f mkdocs.yml`
+
 nav:
   - Home: index.md
+  - Statistical genetics:
+      - Linear mixed models: statistical_genetics/linear_mixed_models.md
   - Python projects:
       - Linear regression: python_projects/linear_regression.md
       - Mendelian randomisation: python_projects/mendelian_randomisation.md
@@ -42,4 +46,5 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 extra_javascript: # for rendering LaTeX math
+  - javascripts/mathjax.js
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

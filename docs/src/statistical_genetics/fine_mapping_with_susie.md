@@ -151,6 +151,34 @@ $$
 where $\vec{\alpha} = (\alpha_1, \ldots, \alpha_p)$, $\vec{\mu}_1 = (\mu_{1,1}, \ldots, \mu_{1,p})$, and $\vec{\sigma}_1^2 = (\sigma_{1,1}^2, \ldots, \sigma_{1,p}^2)$.
 
 
+#### The iterative Bayesian stepwise selection (IBSS) algorithm
+
+```python
+def ibss(X: np.ndarray, y: np.ndarray, pi: np.ndarray, sigma_sq: float, L: int, sigma0_sq: np.ndarray):
+    """Python-like pseudocode for the IBSS algorithm
+
+    Parameters
+    ----------
+    X : numpy.ndarray
+        An n-by-p matrix of mean-centred genotypes where n is the number of individuals and p is the number of variants.
+    y : numpy.ndarray
+        An n-vector of mean-centred phenotypes
+    pi : numpy.ndarray
+        A p-vector of prior probabilities for each variant being causal. The elements must be non-negative and sum up to 1.
+    sigma_sq : float
+        The residual variance.
+    L : int
+        The maximum number of causal variants.
+    sigma0_sq : np.ndarray
+        A L-vector of prior variances for the effect sizes of each of the L causal variants.
+
+    Returns
+    -------
+    """
+
+```
+
+
 
 !!! note "References"
 

@@ -13,7 +13,7 @@ nav:
   - Home: index.md
   - Statistical genetics:
       - Fine-mapping with SuSiE: statistical_genetics/fine_mapping_with_susie.md
-      - Linear mixed models: statistical_genetics/linear_mixed_models.md
+      - The genetic relationship matrix: statistical_genetics/linear_mixed_models.md
   - Python projects:
       - Linear regression: python_projects/linear_regression.md
       - Mendelian randomisation: python_projects/mendelian_randomisation.md

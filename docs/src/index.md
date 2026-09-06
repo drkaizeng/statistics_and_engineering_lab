@@ -6,7 +6,7 @@ Transforming data analysis and statistical methods into production-quality code.
 ### Statistical genetics
 
 - [Fine-mapping with SuSiE](statistical_genetics/fine_mapping_with_susie.md)
-- [Linear mixed models](statistical_genetics/linear_mixed_models.md)
+- [The genetic relationship matrix](statistical_genetics/linear_mixed_models.md)
 
 ### Python
 

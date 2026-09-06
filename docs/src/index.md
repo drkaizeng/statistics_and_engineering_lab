@@ -5,7 +5,7 @@ Transforming data analysis and statistical methods into production-quality code.
 
 ### Statistical genetics
 
-- [Linear mixed models](statistical_genetics/linear_mixed_models.md)
+- [The genetic relationship matrix](statistical_genetics/linear_mixed_models.md)
 
 ### Python
 

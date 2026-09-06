@@ -1,22 +1,11 @@
 # Fine-mapping with SuSiE
 
-**Project status:** Active
+*This note derives the sum of single-effects (SuSiE) model for genetic fine-mapping, together with
+the variational empirical Bayes scheme used to fit it.*
 
-## Roadmap
-- [] **Theory**:
-  - [] Learn the variational empirical Bayes approach by deriving the SuSiE model.
-  - [] Understand the SuSiE-RSS model for fine-mapping with summary statistics.
-- [] **Implementation**: Implement the SuSiE-RSS model in Python.
-- [] **Simulation**:
-  - [] Simulate data to test the SuSiE-RSS model.
-  - [] Understand the cause of some commonly observed issues with the SuSiE-RSS model, such as non-significant variants being assigned high PIPs, highly correlated variants being assigned high PIPs, and the model failing to converge.
-- [] **Automation**: Configure a CI/CD pipeline for automated testing and deployment to PyPI.
+The exposition is based on Wang et al. (2020). Formulas from the paper are reproduced, and where necessary, derivations are provided. The extension to summary statistics, SuSiE-RSS (Zou et al., 2022), is not covered here.
 
-
-## Theory
-The goal of this section is to understand the SuSiE model (Wang et al., 2020) and its extension, SuSiE-RSS (Zou et al., 2022). Formulas from the original papers are reproduced, and where necessary, derivations are provided.
-
-### The model
+## The model
 Let $\mathbf{y}$ be an $n$-vector of mean-centred phenotypes, and let $\mathbf{X}$ be an $n \times p$ matrix of mean-centered genotypes, where $n$ is the number of individuals and $p$ is the number of variants. The following linear model is assumed, with the mean-centring ensuring the intercept is zero:
 
 $$
@@ -38,7 +27,7 @@ $$
 
 A level-$\rho$ credible set is defined as a set of variants that contains at least one causal variant with probability $\rho$ or greater. 
 
-### The sum of single-effects (SuSiE) regression model
+## The sum of single-effects (SuSiE) regression model
 Instead of attempting to finding causal variants using \eqref{eq:standard_linear_model} directly, a more tractable alternative where the regression coefficients $\mathbf{b}$ are expressed as a sum of single-effect vectors is used:
 
 $$
@@ -68,9 +57,9 @@ Put together, the SuSiE model has the following hierarchical structure:
 
 When $L \ll p$, the SuSiE model is approximately equal to the model \eqref{eq:standard_linear_model} in which $L$ randomly-chosen variables have non-zero effects. It should nonetheless be noted that the two models are different. In particular, there is nothing in the SuSiE model that prevents two or more of the $\mathbf{b}^{(l)}$ vectors from having non-zero elements in the same position, although this is unlikely to occur in practice.
 
-### Inferences using the SuSiE model
+## Inferences using the SuSiE model
 
-#### Single-effect regression (SER) model
+### Single-effect regression (SER) model
 The first step towards understanding how to make inferences using the SuSiE model is to derive properties of its constituents, the single-effect regression (SER) model, which can be obtained by setting $L = 1$ in \eqref{eq:susie_model_start} - \eqref{eq:susie_model_end}. In other words, the SER model assumes that exactly one variant has a non-zero effect.
 
 The first quantity of interest is the posterior probability that variant $j$ is causal (the subscript $l$ is dropped for clarity): 
@@ -151,7 +140,7 @@ $$
 where $\vec{\alpha} = (\alpha_1, \ldots, \alpha_p)$, $\vec{\mu}_1 = (\mu_{1,1}, \ldots, \mu_{1,p})$, and $\vec{\sigma}_1^2 = (\sigma_{1,1}^2, \ldots, \sigma_{1,p}^2)$.
 
 
-#### The iterative Bayesian stepwise selection (IBSS) algorithm
+### The iterative Bayesian stepwise selection (IBSS) algorithm
 
 ```python
 def ibss(X: np.ndarray, y: np.ndarray, pi: np.ndarray, sigma_sq: float, L: int, sigma0_sq: np.ndarray):

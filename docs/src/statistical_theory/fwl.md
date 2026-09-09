@@ -1,3 +1,5 @@
+# The Frisch-Waugh-Lovell Theorem
+
 Consider the following multiple linear regression model:
 
 $$
@@ -7,7 +9,7 @@ $$
 \end{align}
 $$
 
-where $\mathbf{y}$ is the response variable, $\mathbf{X}$  (n by p) and $\mathbf{C}$ (n by q) are matrices of predictors and covariates, $\boldsymbol{\beta}$ and $\boldsymbol{\alpha}$ are vectors of the effect sizes of the predictors and covariates, and $\boldsymbol{\epsilon}$ is the residual error. Note that the intercept can be viewed as part of the covariate matrix $\mathbf{C}$.
+where $\mathbf{y}$ is the response variable, $\mathbf{X}$  ($n$ by $p$) and $\mathbf{C}$ ($n$ by $q$) are matrices of predictors and covariates, $\boldsymbol{\beta}$ and $\boldsymbol{\alpha}$ are vectors of the effect sizes of the predictors and covariates, and $\boldsymbol{\epsilon}$ is the residual error with $\text{Cov}(\boldsymbol{\epsilon}) = \sigma^2 \mathbf{I}$. Note that the intercept can be viewed as part of the covariate matrix $\mathbf{C}$.
 
 We define $\mathbf{H} = \mathbf{C} (\mathbf{C}^\top \mathbf{C})^{-1} \mathbf{C}^\top$ as the hat matrix, and multiply both sides of \eqref{eq:mulreg} by $(\mathbf{I} - \mathbf{H})$, where $\mathbf{I}$ is the identity matrix. This leads to
 
@@ -27,6 +29,7 @@ $$
 \end{align}
 $$
 
+The Frisch-Waugh-Lovell theorem proves that the residual errors from the above procedure are identical to the residual errors obtained from fitting the full model \eqref{eq:mulreg}. Thus, it is important that when fitting the above model, the residuals are interpreted correctly and that the standard errors are estimated by using the correct degrees of freedom $n - p - q$.
 
 # Numerical considerations
 When fitting $\mathbf{y} = \mathbf{C}\mathbf{b} + \mathbf{e}$ (and similarly, when regressing $\mathbf{X}$ on $\mathbf{C}$), it is important to consider the numerical stability. First, it is useful to transform the columns of $\mathbf{C}$ so that they are on a comparable scale as follows. Define
@@ -43,7 +46,7 @@ $$
 \end{align}
 $$
 
-Secondly, directly computing $\mathbf{H}$ by performing matrix inversion is numerically unstable for ill-conditioned matrices. Instead, performing the SVD (singular value decomposition) on the scaled matrix $\mathbf{D}$ gives us:
+Secondly, directly computing $\mathbf{H}$ by performing matrix inversion is numerically unstable for ill-conditioned matrices, because forming $\mathbf{C}^\top \mathbf{C}$ squares the condition number, $\kappa(\mathbf{C}^\top \mathbf{C}) = \kappa(\mathbf{C})^2$, halving the number of accurate digits available; working from a decomposition of $\mathbf{D}$ instead keeps the error growth proportional to $\kappa(\mathbf{D})$ rather than its square. Therefore, we perform the SVD (singular value decomposition) on the scaled matrix $\mathbf{D}$:
 
 $$
 \begin{align}
@@ -51,7 +54,7 @@ $$
 \end{align}
 $$
 
-where  $\mathbf{U}$ (n by q) and $\mathbf{V}$ (q by q) are matrices with orthonormal columns, and $\mathbf{\Sigma}$ is a diagonal matrix containing the singular values of $\mathbf{D}$. Specifically, the columns of $\mathbf{U}$ are the eigenvectors of $\mathbf{D} \mathbf{D}^\top$, and $\mathbf{\Sigma}$ contains the square roots of the corresponding eigenvalues:
+where  $\mathbf{U}$ ($n$ by $q$) and $\mathbf{V}$ ($q$ by $q$) are matrices with orthonormal columns, and $\mathbf{\Sigma}$ is a diagonal matrix containing the singular values of $\mathbf{D}$. Specifically, the columns of $\mathbf{U}$ are the eigenvectors of $\mathbf{D} \mathbf{D}^\top$, and $\mathbf{\Sigma}$ contains the square roots of the corresponding eigenvalues:
 
 $$
 \begin{align}

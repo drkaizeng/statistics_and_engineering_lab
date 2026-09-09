@@ -11,6 +11,8 @@ theme:
 
 nav:
   - Home: index.md
+  - Statistical theory:
+      - The Frisch-Waugh-Lovell theorem: statistical_theory/fwl.md
   - Statistical genetics:
       - The genetic relationship matrix: statistical_genetics/linear_mixed_models.md
   - Python projects:

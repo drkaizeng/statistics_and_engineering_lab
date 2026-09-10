@@ -3,6 +3,10 @@ Transforming data analysis and statistical methods into production-quality code.
 
 ## Projects
 
+### Statistical theory
+
+- [The Frisch-Waugh-Lovell theorem](statistical_theory/fwl.md)
+
 ### Statistical genetics
 
 - [The genetic relationship matrix](statistical_genetics/linear_mixed_models.md)
